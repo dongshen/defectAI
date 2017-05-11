@@ -40,17 +40,19 @@ public class SimHashTest {
 		try {
 			hash1 = new SimHash(s1);
 			assertEquals(new BigInteger("7168736703511516"), hash1.intSimHash);
-			List<BigInteger> list1 = hash1.subByDistance(hash1, 3);
-			assertEquals(new BigInteger("15326"), list1.get(0));
-			assertEquals(new BigInteger("52521"), list1.get(1));
-			assertEquals(new BigInteger("47086"), list1.get(2));
+			List<BigInteger> list1 = hash1.subByDistance(hash1, 4);
+			assertEquals(new BigInteger("957"), list1.get(0));
+			assertEquals(new BigInteger("3789"), list1.get(1));
+			assertEquals(new BigInteger("667"), list1.get(2));
+			assertEquals(new BigInteger("2030"), list1.get(3));
 			
 			hash2 = new SimHash(s2);
 			assertEquals(new BigInteger("7168045213776604"), hash2.intSimHash);
-			List<BigInteger> list2 = hash1.subByDistance(hash2, 3);
-			assertEquals(new BigInteger("15198"), list2.get(0));
-			assertEquals(new BigInteger("52521"), list2.get(1));
-			assertEquals(new BigInteger("13038"), list2.get(2));
+			List<BigInteger> list2 = hash1.subByDistance(hash2, 4);
+			assertEquals(new BigInteger("949"), list2.get(0));
+			assertEquals(new BigInteger("3789"), list2.get(1));
+			assertEquals(new BigInteger("659"), list2.get(2));
+			assertEquals(new BigInteger("750"), list2.get(3));
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
