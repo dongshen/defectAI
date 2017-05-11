@@ -2,14 +2,16 @@ package sdong.defectAI.similarity;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SimHash {
 
 	private String tokens;
 
-	private BigInteger intSimHash;
+	public BigInteger intSimHash;
 
-	private String strSimHash;
+	public String strSimHash;
 
 	private int hashbits = 64;
 
@@ -23,7 +25,7 @@ public class SimHash {
 		this.hashbits = hashbits;
 		this.intSimHash = this.simHash();
 	}
-	
+
 	public BigInteger simHash() throws IOException {
 
 		// 定义特征向量/数组
@@ -63,8 +65,9 @@ public class SimHash {
 				simHashBuffer.append("0");
 			}
 		}
-		String strSimHash = simHashBuffer.toString();
-		System.out.println(strSimHash + " length " + strSimHash.length());
+
+		strSimHash = simHashBuffer.toString();
+		// System.out.println(strSimHash + " length " + strSimHash.length());
 		return fingerprint;
 	}
 
@@ -86,6 +89,35 @@ public class SimHash {
 			}
 			return x;
 		}
+	}
+
+	public List<BigInteger> subByDistance(SimHash simHash, int distance) {
+		// 分成几组来检查
+		int numEach = this.hashbits / (distance + 1);
+		List<BigInteger> characters = new ArrayList<BigInteger>();
+
+		StringBuffer buffer = new StringBuffer();
+
+		for (int i = 0; i < this.intSimHash.bitLength(); i++) {
+			// 当且仅当设置了指定的位时，返回 true
+			boolean sr = simHash.intSimHash.testBit(i);
+
+			if (sr) {
+				buffer.append("1");
+			} else {
+				buffer.append("0");
+			}
+
+			if ((i + 1) % numEach == 0) {
+				// 将二进制转为BigInteger
+				BigInteger eachValue = new BigInteger(buffer.toString(), 2);
+				//System.out.println("----" + eachValue);
+				buffer.delete(0, buffer.length());
+				characters.add(eachValue);
+			}
+		}
+
+		return characters;
 	}
 
 }
