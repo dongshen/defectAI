@@ -15,6 +15,10 @@ public class SimHash {
 
 	private int hashbits = 64;
 
+	public SimHash(){
+		
+	}
+	
 	public SimHash(String tokens) throws IOException {
 		this.tokens = tokens;
 		this.intSimHash = this.simHash();
