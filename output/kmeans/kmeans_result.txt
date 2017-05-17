@@ -1,0 +1,17 @@
+There are 4 clusters!
+(1.0, 1.0) belongs to cluster 1
+(2.0, 1.0) belongs to cluster 1
+(1.0, 2.0) belongs to cluster 1
+(2.0, 2.0) belongs to cluster 1
+(6.0, 1.0) belongs to cluster 3
+(6.0, 2.0) belongs to cluster 3
+(7.0, 1.0) belongs to cluster 3
+(7.0, 2.0) belongs to cluster 3
+(1.0, 5.0) belongs to cluster 4
+(1.0, 6.0) belongs to cluster 4
+(2.0, 5.0) belongs to cluster 4
+(2.0, 6.0) belongs to cluster 4
+(6.0, 5.0) belongs to cluster 2
+(6.0, 6.0) belongs to cluster 2
+(7.0, 5.0) belongs to cluster 2
+(7.0, 6.0) belongs to cluster 2
