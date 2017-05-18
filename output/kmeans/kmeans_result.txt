@@ -1,17 +1,17 @@
 There are 4 clusters!
-(1.0, 1.0) belongs to cluster 1
-(2.0, 1.0) belongs to cluster 1
-(1.0, 2.0) belongs to cluster 1
-(2.0, 2.0) belongs to cluster 1
-(6.0, 1.0) belongs to cluster 3
-(6.0, 2.0) belongs to cluster 3
-(7.0, 1.0) belongs to cluster 3
-(7.0, 2.0) belongs to cluster 3
-(1.0, 5.0) belongs to cluster 4
-(1.0, 6.0) belongs to cluster 4
-(2.0, 5.0) belongs to cluster 4
-(2.0, 6.0) belongs to cluster 4
-(6.0, 5.0) belongs to cluster 2
-(6.0, 6.0) belongs to cluster 2
-(7.0, 5.0) belongs to cluster 2
-(7.0, 6.0) belongs to cluster 2
+(1.0, 1.0) (1) belongs to cluster 1
+(2.0, 1.0) (2) belongs to cluster 1
+(1.0, 2.0) (3) belongs to cluster 1
+(2.0, 2.0) (4) belongs to cluster 1
+(6.0, 1.0) (5) belongs to cluster 3
+(6.0, 2.0) (6) belongs to cluster 3
+(7.0, 1.0) (7) belongs to cluster 3
+(7.0, 2.0) (8) belongs to cluster 3
+(1.0, 5.0) (9) belongs to cluster 4
+(1.0, 6.0) (10) belongs to cluster 4
+(2.0, 5.0) (11) belongs to cluster 4
+(2.0, 6.0) (12) belongs to cluster 4
+(6.0, 5.0) (13) belongs to cluster 2
+(6.0, 6.0) (14) belongs to cluster 2
+(7.0, 5.0) (15) belongs to cluster 2
+(7.0, 6.0) (16) belongs to cluster 2

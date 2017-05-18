@@ -14,9 +14,14 @@ public class Kmeans {
 	private class Node {
 		int label;// label 用来记录点属于第几个 cluster
 		double[] attributes;
+		long seq;
 
 		public Node() {
 			attributes = new double[100];
+		}
+
+		public void setSeq(long seq) {
+			this.seq = seq;
 		}
 	}
 
@@ -58,10 +63,13 @@ public class Kmeans {
 			String str;
 			String[] strArray;
 			arraylist = new ArrayList<Node>();
+			long seq = 1;
 			while ((str = br.readLine()) != null) {
 				strArray = str.split(",");
 				dimension = strArray.length;
 				Node node = new Node();
+				node.setSeq(seq);
+				seq = seq + 1;
 				for (int i = 0; i < dimension; ++i) {
 					node.attributes[i] = Double.parseDouble(strArray[i]);
 				}
@@ -204,6 +212,7 @@ public class Kmeans {
 					out.print(arraylist.get(i).attributes[j] + ", ");
 				}
 				out.print(arraylist.get(i).attributes[dimension - 1] + ") ");
+				out.print("(" + arraylist.get(i).seq + ") ");
 				out.println("belongs to cluster " + arraylist.get(i).label);
 			}
 			out.close();
