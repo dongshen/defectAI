@@ -1,7 +1,6 @@
 package sdong.defectAI.cluster;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.io.File;
 
@@ -10,13 +9,11 @@ import org.junit.Test;
 import sdong.defectAI.exception.DefectAIException;
 
 public class DirectClusterTest {
-	double a[][] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 1.5, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 3.1, 2.7, 0, 0, 0, 0, 0, 0, 0 }, { 2.1, 1.4, 1.2, 0, 0, 0, 0, 0, 0 },
-			{ 5.8, 6.0, 3.6, 4.7, 0, 0, 0, 0, 0 }, { 4.7, 4.4, 1.8, 2.9, 1.7, 0, 0, 0, 0 },
-			{ 5.7, 5.5, 2.9, 4.0, 0.8, 1.0, 0, 0, 0 }, { 1.3, 0.9, 2.2, 1.2, 5.1, 3.9, 5.0, 0, 0 },
-			{ 2.6, 1.6, 1.2, 0.5, 4.8, 3.0, 3.3, 1.4, 0 } };
+	double a[][] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 1.5, 0, 0, 0, 0, 0, 0, 0, 0 }, { 3.1, 2.7, 0, 0, 0, 0, 0, 0, 0 },
+			{ 2.1, 1.4, 1.2, 0, 0, 0, 0, 0, 0 }, { 5.8, 6.0, 3.6, 4.7, 0, 0, 0, 0, 0 },
+			{ 4.7, 4.4, 1.8, 2.9, 1.7, 0, 0, 0, 0 }, { 5.7, 5.5, 2.9, 4.0, 0.8, 1.0, 0, 0, 0 },
+			{ 1.3, 0.9, 2.2, 1.2, 5.1, 3.9, 5.0, 0, 0 }, { 2.6, 1.6, 1.2, 0.5, 4.8, 3.0, 3.3, 1.4, 0 } };
 
-	
 	@Test
 	public void testCompute() {
 		String path = "output" + File.separatorChar + "directCluster.txt";
@@ -49,19 +46,38 @@ public class DirectClusterTest {
 		cluster.compute();
 		int k = cluster.getClusterK(4.0);
 		assertEquals(2, k);
-		
+
 		k = cluster.getClusterK(5.0);
 		assertEquals(2, k);
-		
+
 		k = cluster.getClusterK(2.0);
 		assertEquals(3, k);
-		
+
 		k = cluster.getClusterK(1.0);
 		assertEquals(6, k);
-		
+
 		k = cluster.getClusterK(0.7);
 		assertEquals(8, k);
-		
+
+		k = cluster.getClusterK(5.8);
+		assertEquals(1, k);
+	}
+
+	@Test
+	public void testPrintResult() {
+		String path = "output" + File.separatorChar + "directCluster.txt";
+		try {
+			DirectCluster cluster = new DirectCluster();
+			cluster.setDirectClusterInput(a);
+			cluster.compute();
+			int k = cluster.getClusterK(4.0);
+			assertEquals(2, k);
+
+			cluster.printResult(path);
+		} catch (DefectAIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

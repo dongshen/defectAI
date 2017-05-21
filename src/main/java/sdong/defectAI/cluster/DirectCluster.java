@@ -13,6 +13,7 @@ public class DirectCluster {
 	List<String> category = new ArrayList<String>();
 	List<Double> sort = new ArrayList<Double>();
 	List<List<NodeDistance>> trees = new ArrayList<List<NodeDistance>>();
+	Map<String, List<NodeDistance>> seq = new HashMap<String, List<NodeDistance>>();
 	int dimension;
 	int minX = 0;
 	int minY = 0;
@@ -99,12 +100,13 @@ public class DirectCluster {
 	public int getClusterK(double threshold) {
 		int k = 0;
 		NodeDistance last = null;
-		Map<String, List<NodeDistance>> seq = new HashMap<String, List<NodeDistance>>();
 
 		for (List<NodeDistance> branch : trees) {
 			last = null;
+			NodeDistance maxNode = null;
 			List<NodeDistance> list = new ArrayList<NodeDistance>();
 			for (NodeDistance nodes : branch) {
+				maxNode = nodes;
 				if (nodes.distance <= threshold) {
 					list.add(nodes);
 				} else {
@@ -121,7 +123,15 @@ public class DirectCluster {
 							listnodes.addAll(list);
 						}
 					}
-					break;
+				}
+			}
+			if (maxNode != null && maxNode.distance <= threshold) {
+				String lastKey = maxNode.nodeOne + "," + maxNode.nodeTwo;
+				List<NodeDistance> listnodes = seq.get(lastKey);
+				if (listnodes == null) {
+					seq.put(lastKey, list);
+				} else {
+					listnodes.addAll(list);
 				}
 			}
 		}
@@ -188,6 +198,24 @@ public class DirectCluster {
 						+ String.format("%3d", nodes.nodeTwo) + "," + String.format("%10.5f", nodes.distance) + "] ";
 			}
 			strList.add(strline);
+		}
+
+		// print seq;
+		int seqNum = 1;
+		for (Map.Entry<String, List<NodeDistance>> entry : seq.entrySet()) {
+			strline = "Sequence " + seqNum + ":";
+			List<NodeDistance> list = entry.getValue();
+			Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+			for (NodeDistance node : list) {
+				map.put(node.nodeOne, node.nodeTwo);
+				map.put(node.nodeTwo, node.nodeOne);
+			}
+			List<Integer> mapKeyList = new ArrayList<Integer>(map.keySet());
+			for (Integer point : mapKeyList) {
+				strline = strline + point + ",";
+			}
+			strList.add(strline);
+			seqNum = seqNum + 1;
 		}
 
 		FileUtil.saveFile(strList, path);
