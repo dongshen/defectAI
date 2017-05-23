@@ -1,7 +1,9 @@
 package sdong.defectAI.cluster;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -12,8 +14,13 @@ public class DirectCluster {
 	double[][] dist;
 	List<String> category = new ArrayList<String>();
 	List<Double> sort = new ArrayList<Double>();
-	List<List<NodeDistance>> trees = new ArrayList<List<NodeDistance>>();
-	Map<String, List<NodeDistance>> seq = new HashMap<String, List<NodeDistance>>();
+	List<List<NodeCompare>> trees = new ArrayList<List<NodeCompare>>();
+
+	// save kind and sequence list
+	Map<Integer, List<List<Integer>>> seqList = new HashMap<Integer, List<List<Integer>>>();
+
+	// save kind with distance
+	Map<Double, Integer> kindMap = new HashMap<Double, Integer>();
 	int dimension;
 	int minX = 0;
 	int minY = 0;
@@ -22,14 +29,14 @@ public class DirectCluster {
 	String drop = ",";
 	int loop = 1;
 
-	private class NodeDistance {
-		int nodeOne;
-		int nodeTwo;
+	private class NodeCompare {
+		int node1;
+		int node2;
 		double distance;
 
-		public NodeDistance(int nodeOne, int nodeTwo, double distance) {
-			this.nodeOne = nodeOne;
-			this.nodeTwo = nodeTwo;
+		public NodeCompare(int nodeOne, int nodeTwo, double distance) {
+			this.node1 = nodeOne;
+			this.node2 = nodeTwo;
 			this.distance = distance;
 		}
 	}
@@ -62,26 +69,33 @@ public class DirectCluster {
 			// System.out.println("Min[" + minX + "," + minY + "]=" + min);
 			category.add("[" + minX + "," + minY + "]=" + min);
 			buildTree(minX, minY, min);
+			sort.add(min);
 			drop = drop + minX + ",";
 
 			loop = loop + 1;
 		}
+
+		sort = new ArrayList<Double>(new HashSet<Double>(sort));
+		Collections.sort(sort);
+
+		// get cluster
+		getClusterK();
 	}
 
 	private void buildTree(int minX, int minY, double distance) {
 		if (trees.isEmpty()) {
-			NodeDistance node = new NodeDistance(minX, minY, distance);
-			List<NodeDistance> branch = new ArrayList<NodeDistance>();
+			NodeCompare node = new NodeCompare(minX, minY, distance);
+			List<NodeCompare> branch = new ArrayList<NodeCompare>();
 			branch.add(node);
 			trees.add(branch);
 			return;
 		}
 		boolean find = false;
 
-		for (List<NodeDistance> branch : trees) {
-			for (NodeDistance nodes : branch) {
-				if (nodes.nodeOne == minX || nodes.nodeOne == minY || nodes.nodeTwo == minX || nodes.nodeTwo == minY) {
-					NodeDistance node = new NodeDistance(minX, minY, distance);
+		for (List<NodeCompare> branch : trees) {
+			for (NodeCompare nodes : branch) {
+				if (nodes.node1 == minX || nodes.node1 == minY || nodes.node2 == minX || nodes.node2 == minY) {
+					NodeCompare node = new NodeCompare(minX, minY, distance);
 					branch.add(node);
 					find = true;
 					break;
@@ -89,45 +103,55 @@ public class DirectCluster {
 			}
 		}
 		if (find == false) {
-			NodeDistance node = new NodeDistance(minX, minY, distance);
-			List<NodeDistance> branch = new ArrayList<NodeDistance>();
+			NodeCompare node = new NodeCompare(minX, minY, distance);
+			List<NodeCompare> branch = new ArrayList<NodeCompare>();
 			branch.add(node);
 			trees.add(branch);
 		}
 
 	}
 
+	public Map<Double, Integer> getClusterK() {
+
+		int k;
+		for (Double dist : sort) {
+			k = getClusterK(dist);
+			kindMap.put(dist, k);
+
+		}
+		return kindMap;
+	}
+
 	public int getClusterK(double threshold) {
 		int k = 0;
-		NodeDistance last = null;
-
-		for (List<NodeDistance> branch : trees) {
+		NodeCompare last = null;
+		Map<String, List<NodeCompare>> seq = new HashMap<String, List<NodeCompare>>();
+		for (List<NodeCompare> branch : trees) {
 			last = null;
-			NodeDistance maxNode = null;
-			List<NodeDistance> list = new ArrayList<NodeDistance>();
-			for (NodeDistance nodes : branch) {
-				maxNode = nodes;
+			List<NodeCompare> list = new ArrayList<NodeCompare>();
+			boolean push = false;
+			for (NodeCompare nodes : branch) {
 				if (nodes.distance <= threshold) {
 					list.add(nodes);
 				} else {
-					if (list.size() == 0) {
-						// list.add(last);
-
-					} else {
+					if (list.size() > 0) {
 						last = list.get(list.size() - 1);
-						String lastKey = last.nodeOne + "," + last.nodeTwo;
-						List<NodeDistance> listnodes = seq.get(lastKey);
+						String lastKey = last.node1 + "," + last.node2;
+						List<NodeCompare> listnodes = seq.get(lastKey);
 						if (listnodes == null) {
 							seq.put(lastKey, list);
 						} else {
 							listnodes.addAll(list);
 						}
+						push = true;
 					}
+					break;
 				}
 			}
-			if (maxNode != null && maxNode.distance <= threshold) {
-				String lastKey = maxNode.nodeOne + "," + maxNode.nodeTwo;
-				List<NodeDistance> listnodes = seq.get(lastKey);
+			if (push == false && list.size() > 0) {
+				last = list.get(list.size() - 1);
+				String lastKey = last.node1 + "," + last.node2;
+				List<NodeCompare> listnodes = seq.get(lastKey);
 				if (listnodes == null) {
 					seq.put(lastKey, list);
 				} else {
@@ -136,20 +160,39 @@ public class DirectCluster {
 			}
 		}
 
-		k = seq.size();
-		int includeNode = 0;
-		for (Map.Entry<String, List<NodeDistance>> entry : seq.entrySet()) {
-			List<NodeDistance> list = entry.getValue();
-			Map<Integer, Integer> map = new HashMap<Integer, Integer>();
-			for (NodeDistance node : list) {
-				map.put(node.nodeOne, node.nodeTwo);
-				map.put(node.nodeTwo, node.nodeOne);
-			}
-			List<Integer> mapKeyList = new ArrayList<Integer>(map.keySet());
-			includeNode = includeNode + mapKeyList.size();
+		List<List<Integer>> kindlist = new ArrayList<List<Integer>>();
+
+		// all list
+		List<Integer> alllist = new ArrayList<Integer>();
+		for (int i = 0; i < dimension; i++) {
+			alllist.add(i);
 		}
 
-		k = k + (dimension - includeNode);
+		// Get all include nodes
+		Map<Integer, Integer> includeMap = new HashMap<Integer, Integer>();
+		for (Map.Entry<String, List<NodeCompare>> entry : seq.entrySet()) {
+			List<NodeCompare> list = entry.getValue();
+			Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+			for (NodeCompare node : list) {
+				map.put(node.node1, node.node2);
+				map.put(node.node2, node.node1);
+				includeMap.put(node.node1, node.node1);
+				includeMap.put(node.node2, node.node2);
+			}
+			kindlist.add(new ArrayList<Integer>(map.keySet()));
+		}
+
+		// add different
+		alllist.removeAll(new ArrayList<Integer>(includeMap.keySet()));
+		for (Integer gap : alllist) {
+			List<Integer> gaplist = new ArrayList<Integer>();
+			gaplist.add(gap);
+			kindlist.add(gaplist);
+		}
+
+		k = kindlist.size();
+		seqList.put(k, kindlist);
+
 		return k;
 	}
 
@@ -160,9 +203,9 @@ public class DirectCluster {
 		// print header
 		for (int i = 0; i < dimension; i++) {
 			if (i == 0) {
-				strline = String.format("%4d", i);
+				strline = String.format("%10d", i);
 			} else {
-				strline = strline + "," + String.format("%4d", i);
+				strline = strline + "," + String.format("%10d", i);
 			}
 		}
 		strList.add(strline);
@@ -174,7 +217,7 @@ public class DirectCluster {
 				if (j == 0) {
 					strline = String.format("%10.5f", dist[i][j]);
 				} else {
-					strline = strline + String.format("%10.5f", dist[i][j]) + ",";
+					strline = strline + "," + String.format("%10.5f", dist[i][j]);
 				}
 			}
 			strList.add(strline);
@@ -191,31 +234,23 @@ public class DirectCluster {
 		}
 
 		// print tree
-		for (List<NodeDistance> branch : trees) {
+		for (List<NodeCompare> branch : trees) {
 			strline = "";
-			for (NodeDistance nodes : branch) {
-				strline = strline + "[" + String.format("%3d", nodes.nodeOne) + ","
-						+ String.format("%3d", nodes.nodeTwo) + "," + String.format("%10.5f", nodes.distance) + "] ";
+			for (NodeCompare nodes : branch) {
+				strline = strline + "[" + String.format("%3d", nodes.node1) + "," + String.format("%3d", nodes.node2)
+						+ "," + String.format("%10.5f", nodes.distance) + "] ";
 			}
 			strList.add(strline);
 		}
 
 		// print seq;
-		int seqNum = 1;
-		for (Map.Entry<String, List<NodeDistance>> entry : seq.entrySet()) {
-			strline = "Sequence " + seqNum + ":";
-			List<NodeDistance> list = entry.getValue();
-			Map<Integer, Integer> map = new HashMap<Integer, Integer>();
-			for (NodeDistance node : list) {
-				map.put(node.nodeOne, node.nodeTwo);
-				map.put(node.nodeTwo, node.nodeOne);
+		for (Map.Entry<Integer, List<List<Integer>>> entry : seqList.entrySet()) {
+			List<List<Integer>> kindlist = entry.getValue();
+
+			for (List<Integer> list : kindlist) {
+				strList.add("kind=" + entry.getKey() + ":" + list.toString());
 			}
-			List<Integer> mapKeyList = new ArrayList<Integer>(map.keySet());
-			for (Integer point : mapKeyList) {
-				strline = strline + point + ",";
-			}
-			strList.add(strline);
-			seqNum = seqNum + 1;
+
 		}
 
 		FileUtil.saveFile(strList, path);

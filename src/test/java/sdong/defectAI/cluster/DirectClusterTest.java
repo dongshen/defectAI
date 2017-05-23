@@ -3,6 +3,7 @@ package sdong.defectAI.cluster;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -44,23 +45,61 @@ public class DirectClusterTest {
 		DirectCluster cluster = new DirectCluster();
 		cluster.setDirectClusterInput(a);
 		cluster.compute();
-		int k = cluster.getClusterK(4.0);
-		assertEquals(2, k);
 
-		k = cluster.getClusterK(5.0);
-		assertEquals(2, k);
+		assertEquals("{1.7=3, 1.5=4, 0.8=7, 1.2=5, 0.9=6, 0.5=8, 3.1=2, 5.8=1}", cluster.kindMap.toString());
+		
+		List<List<Integer>> list = cluster.seqList.get(1);
+		assertEquals("[0, 1, 2, 3, 4, 5, 6, 7, 8]", list.get(0).toString());
+		
+		list = cluster.seqList.get(2);
+		assertEquals("[0, 1, 2, 3, 7, 8]", list.get(0).toString());
+		assertEquals("[4, 5, 6]", list.get(1).toString());
+		
+		list = cluster.seqList.get(3);
+		assertEquals("[0, 1, 7]", list.get(0).toString());
+		assertEquals("[2, 3, 8]", list.get(1).toString());
+		assertEquals("[4, 5, 6]", list.get(2).toString());
+		
+		list = cluster.seqList.get(4);
+		assertEquals("[4, 6]", list.get(0).toString());
+		assertEquals("[0, 1, 7]", list.get(1).toString());
+		assertEquals("[2, 3, 8]", list.get(2).toString());
+		assertEquals("[5]", list.get(3).toString());
+		
+		list = cluster.seqList.get(5);
+		assertEquals("[4, 6]", list.get(0).toString());
+		assertEquals("[2, 3, 8]", list.get(1).toString());
+		assertEquals("[1, 7]", list.get(2).toString());
+		assertEquals("[0]", list.get(3).toString());
+		assertEquals("[5]", list.get(4).toString());
 
-		k = cluster.getClusterK(2.0);
-		assertEquals(3, k);
+		list = cluster.seqList.get(6);
+		assertEquals("[4, 6]", list.get(0).toString());
+		assertEquals("[3, 8]", list.get(1).toString());
+		assertEquals("[1, 7]", list.get(2).toString());
+		assertEquals("[0]", list.get(3).toString());
+		assertEquals("[2]", list.get(4).toString());
+		assertEquals("[5]", list.get(5).toString());
 
-		k = cluster.getClusterK(1.0);
-		assertEquals(6, k);
-
-		k = cluster.getClusterK(0.7);
-		assertEquals(8, k);
-
-		k = cluster.getClusterK(5.8);
-		assertEquals(1, k);
+		list = cluster.seqList.get(7);
+		assertEquals("[4, 6]", list.get(0).toString());
+		assertEquals("[3, 8]", list.get(1).toString());
+		assertEquals("[0]", list.get(2).toString());
+		assertEquals("[1]", list.get(3).toString());
+		assertEquals("[2]", list.get(4).toString());
+		assertEquals("[5]", list.get(5).toString());
+		assertEquals("[7]", list.get(6).toString());
+	
+		list = cluster.seqList.get(8);
+		assertEquals("[3, 8]", list.get(0).toString());
+		assertEquals("[0]", list.get(1).toString());
+		assertEquals("[1]", list.get(2).toString());
+		assertEquals("[2]", list.get(3).toString());
+		assertEquals("[4]", list.get(4).toString());
+		assertEquals("[5]", list.get(5).toString());
+		assertEquals("[6]", list.get(6).toString());
+		assertEquals("[7]", list.get(7).toString());
+		
 	}
 
 	@Test
@@ -70,8 +109,6 @@ public class DirectClusterTest {
 			DirectCluster cluster = new DirectCluster();
 			cluster.setDirectClusterInput(a);
 			cluster.compute();
-			int k = cluster.getClusterK(4.0);
-			assertEquals(2, k);
 
 			cluster.printResult(path);
 		} catch (DefectAIException e) {

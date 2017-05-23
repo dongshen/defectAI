@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.junit.Test;
@@ -48,8 +49,9 @@ public class TokenizerPythonTest {
 		try {
 			tokenizer.buildTokenizer(strList, fileName);
 			tokenizer.buildTokens();
-			String values = tokenizer.getTokensValue();
-			assertEquals("from,__future__,import,unicode_literals,import,logging", values);
+			Map<Integer,List<String>> values = tokenizer.getTokensValue();
+			assertEquals("[from, __future__, import, unicode_literals]", values.get(1).toString());
+			assertEquals("[import, logging]", values.get(2).toString());
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -66,8 +68,9 @@ public class TokenizerPythonTest {
 		try {
 			tokenizer.buildTokenizer(strList, fileName);
 			tokenizer.buildTokens();
-			String values = tokenizer.getTokensKind();
-			assertEquals("73,82,72,82,72,82", values);
+			Map<Integer,List<String>> values = tokenizer.getTokensKind();
+			assertEquals("[73, 82, 72, 82]", values.get(1).toString());
+			assertEquals("[72, 82]", values.get(2).toString());
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

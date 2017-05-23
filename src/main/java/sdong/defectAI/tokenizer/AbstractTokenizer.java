@@ -1,7 +1,10 @@
 package sdong.defectAI.tokenizer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sourceforge.pmd.cpd.SourceCode;
 import net.sourceforge.pmd.cpd.TokenEntry;
@@ -30,28 +33,44 @@ public abstract class AbstractTokenizer {
 		tokenizer.tokenize(sourceCode, tokens);
 	}
 
-	public String getTokensKind() {
-		StringBuffer bf = new StringBuffer();
+	public Map<Integer, List<String>> getTokensKind() {
+		Map<Integer, List<String>> valueList = new HashMap<Integer, List<String>>();
 		List<TokenEntry> entries = tokens.getTokens();
+		int lineNo;
+		List<String> values;
 		for (TokenEntry entry : entries) {
 			if (entry.getKind() != 0) {
-				bf.append(entry.getKind()).append(",");
+				lineNo = entry.getBeginLine();
+				values = valueList.get(lineNo);
+				if (values == null) {
+					values = new ArrayList<String>();
+					valueList.put(lineNo, values);
+				}
+				values.add(String.valueOf(entry.getKind()));
 			}
 		}
 
-		return bf.substring(0, bf.length() - 1).toString();
+		return valueList;
 	}
 
-	public String getTokensValue() {
-		StringBuffer bf = new StringBuffer();
+	public Map<Integer, List<String>> getTokensValue() {
+		Map<Integer, List<String>> valueList = new HashMap<Integer, List<String>>();
 		List<TokenEntry> entries = tokens.getTokens();
+		int lineNo;
+		List<String> values;
 		for (TokenEntry entry : entries) {
 			if (entry.getKind() != 0) {
-				bf.append(entry.toString()).append(",");
+				lineNo = entry.getBeginLine();
+				values = valueList.get(lineNo);
+				if (values == null) {
+					values = new ArrayList<String>();
+					valueList.put(lineNo, values);
+				}
+				values.add(entry.toString());
 			}
 		}
 
-		return bf.substring(0, bf.length() - 1).toString();
+		return valueList;
 	}
 
 }
