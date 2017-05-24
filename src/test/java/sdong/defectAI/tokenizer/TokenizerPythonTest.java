@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 import org.junit.Test;
 
 import net.sourceforge.pmd.cpd.TokenEntry;
+import sdong.defectAI.exception.DefectAIException;
+import sdong.defectAI.utils.FileUtil;
 
 public class TokenizerPythonTest {
 
@@ -26,15 +28,22 @@ public class TokenizerPythonTest {
 			tokenizer.buildTokenizer(fileName);
 			tokenizer.buildTokens();
 			List<TokenEntry> tokens = tokenizer.getTokens();
-
 			assertEquals(1218, tokens.size());
-			for (TokenEntry entry : tokens) {
-
-				System.out.println("Line=" + entry.getBeginLine() + " index=" + entry.getIndex() + " kind="
-						+ entry.getKind() + " string=" + entry.toString());
+			
+			Map<Integer, List<String>> map = tokenizer.getTokensKind();
+			List<List<String>> list = new ArrayList<List<String>>(map.values());
+			
+			List<String> strlist = new ArrayList<String>();
+			for(List<String> tokenlist: list){
+				strlist.add(String.join(",",tokenlist));
 			}
+			String path = "sample-python-token.txt";
+			FileUtil.saveFile(strlist, path);
 
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DefectAIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

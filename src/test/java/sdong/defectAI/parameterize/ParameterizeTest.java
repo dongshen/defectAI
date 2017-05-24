@@ -1,31 +1,27 @@
 package sdong.defectAI.parameterize;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
 
-import net.sourceforge.pmd.cpd.TokenEntry;
-import sdong.defectAI.exception.DefectAIException;
-
 public class ParameterizeTest {
 
 	@Test
-	public void testGetTokenEntry() {
-
-		String fileName = "sample-python.py";
+	public void testParameterizeProcess() {
 
 		Parameterize parameterize = new Parameterize();
 
-		List<TokenEntry> tokens;
-		try {
-			tokens = parameterize.getTokenEntry(fileName);
-			assertEquals(1218, tokens.size());
-		} catch (DefectAIException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		List<String> tokens = new ArrayList<String>(Arrays.asList("82", "15", "82", "7", "82", "15", "82", "8"));
+		List<String> result = parameterize.parameterizeProcess(tokens);
+		assertEquals("[120, 7, 82, 8]", result.toString());
+
+		tokens = Arrays.asList("82,15,82,15,82,7,84,14,82,15,82,8".split(","));
+		result = parameterize.parameterizeProcess(tokens);
+		assertEquals("[120, 7, 84, 14, 82, 8]", result.toString());
 
 	}
 
