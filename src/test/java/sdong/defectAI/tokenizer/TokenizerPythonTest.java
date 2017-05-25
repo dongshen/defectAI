@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 import org.junit.Test;
 
-import net.sourceforge.pmd.cpd.TokenEntry;
+import net.sourceforge.pmd.cpd.Tokens;
 import sdong.defectAI.exception.DefectAIException;
 import sdong.defectAI.utils.FileUtil;
 
@@ -25,17 +25,15 @@ public class TokenizerPythonTest {
 
 		TokenizerPython tokenizer = new TokenizerPython();
 		try {
-			tokenizer.buildTokenizer(fileName);
-			tokenizer.buildTokens();
-			List<TokenEntry> tokens = tokenizer.getTokens();
+			Tokens tokens = tokenizer.buildTokenizer(fileName);
 			assertEquals(1218, tokens.size());
-			
-			Map<Integer, List<String>> map = tokenizer.getTokensKind();
+
+			Map<Integer, List<String>> map = tokenizer.getTokensKind(tokens);
 			List<List<String>> list = new ArrayList<List<String>>(map.values());
-			
+
 			List<String> strlist = new ArrayList<String>();
-			for(List<String> tokenlist: list){
-				strlist.add(String.join(",",tokenlist));
+			for (List<String> tokenlist : list) {
+				strlist.add(String.join(",", tokenlist));
 			}
 			String path = "sample-python-token.txt";
 			FileUtil.saveFile(strlist, path);
@@ -56,9 +54,9 @@ public class TokenizerPythonTest {
 
 		TokenizerPython tokenizer = new TokenizerPython();
 		try {
-			tokenizer.buildTokenizer(strList, fileName);
-			tokenizer.buildTokens();
-			Map<Integer,List<String>> values = tokenizer.getTokensValue();
+			Tokens tokens = tokenizer.buildTokenizer(strList, fileName);
+
+			Map<Integer, List<String>> values = tokenizer.getTokensValue(tokens);
 			assertEquals("[from, __future__, import, unicode_literals]", values.get(1).toString());
 			assertEquals("[import, logging]", values.get(2).toString());
 
@@ -75,9 +73,9 @@ public class TokenizerPythonTest {
 
 		TokenizerPython tokenizer = new TokenizerPython();
 		try {
-			tokenizer.buildTokenizer(strList, fileName);
-			tokenizer.buildTokens();
-			Map<Integer,List<String>> values = tokenizer.getTokensKind();
+			Tokens tokens = tokenizer.buildTokenizer(strList, fileName);
+
+			Map<Integer, List<String>> values = tokenizer.getTokensKind(tokens);
 			assertEquals("[73, 82, 72, 82]", values.get(1).toString());
 			assertEquals("[72, 82]", values.get(2).toString());
 

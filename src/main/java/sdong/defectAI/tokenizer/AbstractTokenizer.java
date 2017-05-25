@@ -16,24 +16,15 @@ public abstract class AbstractTokenizer {
 	protected String fileName;
 	protected Tokenizer tokenizer;
 	protected SourceCode sourceCode;
-	protected Tokens tokens;
 
-	public abstract void buildTokenizer(String fileName) throws IOException;
+	public abstract Tokens buildTokenizer(String fileName) throws IOException;
 
-	public abstract void buildTokenizer(List<String> strList, String fileName) throws IOException;
+	public abstract Tokens buildTokenizer(List<String> strList, String fileName) throws IOException;
 
 	public abstract String getSampleCode() throws IOException;
 
-	public List<TokenEntry> getTokens() throws IOException {
-		return tokens.getTokens();
-	}
 
-	public void buildTokens() throws IOException {
-		tokens = new Tokens();
-		tokenizer.tokenize(sourceCode, tokens);
-	}
-
-	public Map<Integer, List<String>> getTokensKind() {
+	public Map<Integer, List<String>> getTokensKind(Tokens tokens) {
 		Map<Integer, List<String>> valueList = new HashMap<Integer, List<String>>();
 		List<TokenEntry> entries = tokens.getTokens();
 		int lineNo;
@@ -53,7 +44,7 @@ public abstract class AbstractTokenizer {
 		return valueList;
 	}
 
-	public Map<Integer, List<String>> getTokensValue() {
+	public Map<Integer, List<String>> getTokensValue(Tokens tokens) {
 		Map<Integer, List<String>> valueList = new HashMap<Integer, List<String>>();
 		List<TokenEntry> entries = tokens.getTokens();
 		int lineNo;
@@ -71,6 +62,14 @@ public abstract class AbstractTokenizer {
 		}
 
 		return valueList;
+	}
+
+	public void printTokensInfo(Tokens tokens) {
+		for (TokenEntry entry : tokens.getTokens()) {
+			System.out.println("tokenSrcID=" + entry.getTokenSrcID() + ", index=" + entry.getIndex() + ", identifier="
+					+ entry.getIdentifier() + ", beginLine" + entry.getBeginLine() + ", kind=" + entry.getKind()
+					+ ", token=" + entry.toString());
+		}
 	}
 
 }
