@@ -1,47 +1,16 @@
 package sdong.defectAI.parameterize;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import net.sourceforge.pmd.cpd.TokenEntry;
 import net.sourceforge.pmd.cpd.Tokens;
 import net.sourceforge.pmd.lang.python.ast.PythonParserConstants;
-import sdong.defectAI.tokenizer.TokenizerPython;
 
 public class Parameterize {
 
-	TokenizerPython tokenizer;
-	boolean needparameterize = false;
-
-	public Parameterize() {
-		this.tokenizer = new TokenizerPython();
-	}
-
-	public Parameterize(boolean needparameterize) {
-		this.tokenizer = new TokenizerPython();
-		this.needparameterize = needparameterize;
-	}
-
-	public Tokens process(String fileName) throws IOException {
-		Tokens tokens = tokenizer.buildTokenizer(fileName);
-		tokens = parameterizeTokens(tokens);
-
-		return tokens;
-	}
-
-	public Tokens process(List<String> strList, String fileName) throws IOException {
-		Tokens tokens = tokenizer.buildTokenizer(strList, fileName);
-		tokens = parameterizeTokens(tokens);
-
-		return tokens;
-	}
-
 	public Tokens parameterizeTokens(Tokens tokens) {
-		if (needparameterize == false) {
-			return tokens;
-		}
-
+	
 		Tokens retTokens = new Tokens();
 		int current = 0;
 		int previous = 0;
@@ -141,4 +110,6 @@ public class Parameterize {
 		return returnlist;
 
 	}
+
+
 }

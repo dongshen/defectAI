@@ -213,7 +213,7 @@ public interface PythonParserConstants {
   /** RegularExpression Id. */
   int TRIPLE_USTRING2 = 115;
   /** RegularExpression Id. */
-  int DEFINE_FUNCTION = 200;
+  int DEFINE_FUNCTION = 199;
   
   /** Lexical state. */
   int DEFAULT = 0;

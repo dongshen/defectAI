@@ -12,9 +12,13 @@ import net.sourceforge.pmd.cpd.Tokens;
 
 public class TokenizerPython extends AbstractTokenizer {
 
+	public final int maxKindSize = 200;
+	
 	public TokenizerPython() {
 		this.tokenizer = new PythonTokenizer();
+		maxTokenKindSize = this.maxKindSize;
 	}
+	
 
 	@Override
 	public Tokens buildTokenizer(String fileName) throws IOException {

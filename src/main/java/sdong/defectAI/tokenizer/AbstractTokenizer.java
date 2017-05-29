@@ -1,17 +1,15 @@
 package sdong.defectAI.tokenizer;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.sourceforge.pmd.cpd.SourceCode;
-import net.sourceforge.pmd.cpd.TokenEntry;
 import net.sourceforge.pmd.cpd.Tokenizer;
 import net.sourceforge.pmd.cpd.Tokens;
 
 public abstract class AbstractTokenizer {
+
+	protected int maxTokenKindSize;
 
 	protected String fileName;
 	protected Tokenizer tokenizer;
@@ -24,52 +22,13 @@ public abstract class AbstractTokenizer {
 	public abstract String getSampleCode() throws IOException;
 
 
-	public Map<Integer, List<String>> getTokensKind(Tokens tokens) {
-		Map<Integer, List<String>> valueList = new HashMap<Integer, List<String>>();
-		List<TokenEntry> entries = tokens.getTokens();
-		int lineNo;
-		List<String> values;
-		for (TokenEntry entry : entries) {
-			if (entry.getKind() != 0) {
-				lineNo = entry.getBeginLine();
-				values = valueList.get(lineNo);
-				if (values == null) {
-					values = new ArrayList<String>();
-					valueList.put(lineNo, values);
-				}
-				values.add(String.valueOf(entry.getKind()));
-			}
-		}
-
-		return valueList;
+	public int getMaxTokenKindSize() {
+		return maxTokenKindSize;
 	}
 
-	public Map<Integer, List<String>> getTokensValue(Tokens tokens) {
-		Map<Integer, List<String>> valueList = new HashMap<Integer, List<String>>();
-		List<TokenEntry> entries = tokens.getTokens();
-		int lineNo;
-		List<String> values;
-		for (TokenEntry entry : entries) {
-			if (entry.getKind() != 0) {
-				lineNo = entry.getBeginLine();
-				values = valueList.get(lineNo);
-				if (values == null) {
-					values = new ArrayList<String>();
-					valueList.put(lineNo, values);
-				}
-				values.add(entry.toString());
-			}
-		}
-
-		return valueList;
+	public void setMaxTokenKindSize(int maxTokenKindSize) {
+		this.maxTokenKindSize = maxTokenKindSize;
 	}
-
-	public void printTokensInfo(Tokens tokens) {
-		for (TokenEntry entry : tokens.getTokens()) {
-			System.out.println("tokenSrcID=" + entry.getTokenSrcID() + ", index=" + entry.getIndex() + ", identifier="
-					+ entry.getIdentifier() + ", beginLine" + entry.getBeginLine() + ", kind=" + entry.getKind()
-					+ ", token=" + entry.toString());
-		}
-	}
-
+	
+	
 }

@@ -2,6 +2,7 @@ package sdong.defectAI.tokenizer;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +12,6 @@ import java.util.logging.Logger;
 import org.junit.Test;
 
 import net.sourceforge.pmd.cpd.Tokens;
-import sdong.defectAI.exception.DefectAIException;
-import sdong.defectAI.utils.FileUtil;
 
 public class TokenizerPythonTest {
 
@@ -28,20 +27,10 @@ public class TokenizerPythonTest {
 			Tokens tokens = tokenizer.buildTokenizer(fileName);
 			assertEquals(1218, tokens.size());
 
-			Map<Integer, List<String>> map = tokenizer.getTokensKind(tokens);
-			List<List<String>> list = new ArrayList<List<String>>(map.values());
-
-			List<String> strlist = new ArrayList<String>();
-			for (List<String> tokenlist : list) {
-				strlist.add(String.join(",", tokenlist));
-			}
-			String path = "sample-python-token.txt";
-			FileUtil.saveFile(strlist, path);
+			String path = "output" + File.separatorChar + "sample-python-token.txt";
+			TokenUtils.saveTokensKind(tokens, path);
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DefectAIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -56,7 +45,7 @@ public class TokenizerPythonTest {
 		try {
 			Tokens tokens = tokenizer.buildTokenizer(strList, fileName);
 
-			Map<Integer, List<String>> values = tokenizer.getTokensValue(tokens);
+			Map<Integer, List<String>> values = TokenUtils.getTokensValue(tokens);
 			assertEquals("[from, __future__, import, unicode_literals]", values.get(1).toString());
 			assertEquals("[import, logging]", values.get(2).toString());
 
@@ -75,7 +64,7 @@ public class TokenizerPythonTest {
 		try {
 			Tokens tokens = tokenizer.buildTokenizer(strList, fileName);
 
-			Map<Integer, List<String>> values = tokenizer.getTokensKind(tokens);
+			Map<Integer, List<Integer>> values = TokenUtils.getTokensKind(tokens);
 			assertEquals("[73, 82, 72, 82]", values.get(1).toString());
 			assertEquals("[72, 82]", values.get(2).toString());
 
