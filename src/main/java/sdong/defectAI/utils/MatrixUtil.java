@@ -9,13 +9,19 @@ public class MatrixUtil {
 		int dimY = matrix[0].length;
 		PrintStream out = new PrintStream(path);
 		for (int j = 0; j < dimX; j++) {
-			out.print(String.format("%10d", j) + " , ");
+			out.print(String.format("%10d", j));
+			if (j < dimX - 1) {
+				out.print(" , ");
+			}
 		}
 		out.println();
 
 		for (int i = 0; i < dimY; i++) {
 			for (int j = 0; j < dimX; j++) {
-				out.print(String.format("%10.6f", matrix[i][j]) + " , ");
+				out.print(String.format("%10.6f", matrix[i][j]));
+				if (j < dimX - 1) {
+					out.print(" , ");
+				}
 			}
 			out.println();
 		}

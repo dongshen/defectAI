@@ -86,6 +86,14 @@ public class PreProcess {
 	public void setNeedWeight(boolean needWeight) {
 		this.needWeight = needWeight;
 	}
+
+	public boolean isNeedparameterize() {
+		return needparameterize;
+	}
+
+	public void setNeedparameterize(boolean needparameterize) {
+		this.needparameterize = needparameterize;
+	}
 	
 	
 }

@@ -11,13 +11,17 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class Kmeans {
-	private class Node {
+	public Kmeans(int dimension){
+		this.dimension = dimension;
+	}
+	
+	public class Node {
 		int label;// label 用来记录点属于第几个 cluster
 		double[] attributes;
 		long seq;
 
 		public Node() {
-			attributes = new double[100];
+			attributes = new double[dimension];
 		}
 
 		public void setSeq(long seq) {
@@ -57,16 +61,21 @@ public class Kmeans {
 				}
 			});
 
-	public void setKmeansInput(String path) {
+	public void setKmeansInput(String path, boolean includeHeader) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));
 			String str;
 			String[] strArray;
 			arraylist = new ArrayList<Node>();
 			long seq = 1;
+			if (includeHeader == true) {
+				seq = 0;
+			}
 			while ((str = br.readLine()) != null) {
+				if (seq == 0) {
+					continue;
+				}
 				strArray = str.split(",");
-				dimension = strArray.length;
 				Node node = new Node();
 				node.setSeq(seq);
 				seq = seq + 1;
@@ -116,6 +125,7 @@ public class Kmeans {
 		while (!queue.isEmpty()) {
 			boolean judgeOne = false;
 			boolean judgeTwo = false;
+			//FsQueue 已经按距离的由大到小排序，第一个点就是距离最大的两点
 			NodeComparator nc = FsQueue.poll();
 			if (nc.distance < averageDis)
 				break;// 如果接下来的元组，两节点间距离小于平均距离，则不继续迭代
@@ -149,23 +159,30 @@ public class Kmeans {
 		int cnt = 1;
 		int cntEnd = 0;
 		int numLabel = centroid.size();
+		double gap;
+		DecimalFormat df = new DecimalFormat("#.######");// 保留小数点后6位
+		
 		while (true) {// 迭代，直到所有的质心都不变化为止
 			boolean flag = false;
+			//依据与质心的最小距离，标识每个点
 			for (int i = 0; i < arraylist.size(); ++i) {
 				double dis = 0x7fffffff;
 				cnt = 1;
 				for (int j = 0; j < centroid.size(); ++j) {
 					Node node = centroid.get(j);
-					if (getDistance(arraylist.get(i), node) < dis) {
-						dis = getDistance(arraylist.get(i), node);
+					gap = getDistance(arraylist.get(i), node);
+					if (gap < dis) {
+						dis = gap;
 						arraylist.get(i).label = cnt;
 					}
 					cnt++;
 				}
 			}
+			//
 			int j = 0;
 			numLabel -= 1;
 			while (j < numLabel) {
+				//node保存了属于每个质心的点的每个属性的总值，c保存了属于每个质心的点的个数
 				int c = 0;
 				Node node = new Node();
 				for (int i = 0; i < arraylist.size(); ++i) {
@@ -176,14 +193,24 @@ public class Kmeans {
 						c++;
 					}
 				}
-				DecimalFormat df = new DecimalFormat("#.###");// 保留小数点后三位
-				double[] attributelist = new double[100];
+				//
+				
+				//double[] attributelist = new double[dimension];
+				//用每个质心所属点的每个属性的平均值更新质心属性。若质心的属性都不更新，则质心稳定
+				double attravg;
 				for (int i = 0; i < dimension; ++i) {
+					attravg = 	Double.parseDouble(df.format(node.attributes[i] / c));
+					if(attravg != centroid.get(j).attributes[i]) {
+						centroid.get(j).attributes[i] = attravg;
+						flag = true;
+					}
+					/*
 					attributelist[i] = Double.parseDouble(df.format(node.attributes[i] / c));
 					if (attributelist[i] != centroid.get(j).attributes[i]) {
 						centroid.get(j).attributes[i] = attributelist[i];
 						flag = true;
 					}
+					*/
 				}
 				if (!flag) {
 					cntEnd++;
@@ -200,11 +227,14 @@ public class Kmeans {
 		}
 	}
 
+	public void process(){
+		computeTheK();
+		doIteration(centroidList);
+	}
+	
 	public void printKmeansResults(String path) {
 		try {
 			PrintStream out = new PrintStream(path);
-			computeTheK();
-			doIteration(centroidList);
 			out.println("There are " + centroidList.size() + " clusters!");
 			for (int i = 0; i < arraylist.size(); ++i) {
 				out.print("(");
@@ -221,4 +251,17 @@ public class Kmeans {
 			e.printStackTrace();
 		}
 	}
+
+	public ArrayList<Node> getArraylist() {
+		return arraylist;
+	}
+
+	public ArrayList<Node> getCentroidList() {
+		return centroidList;
+	}
+
+	public double getAverageDis() {
+		return averageDis;
+	}
+
 }
