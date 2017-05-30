@@ -83,4 +83,13 @@ public class TokenUtils {
 		}
 		out.close();
 	}
+	
+	public static void saveTokensValue(Tokens tokens, String fileName) throws FileNotFoundException {
+		Map<Integer, List<String>> values = getTokensValue(tokens);
+		PrintStream out = new PrintStream(fileName);
+		for (Map.Entry<Integer, List<String>> line : values.entrySet()) {
+			out.println(line.getKey() + "=" + line.getValue().toString());
+		}
+		out.close();
+	}
 }

@@ -30,6 +30,9 @@ public class TokenizerPythonTest {
 			String path = "output" + File.separatorChar + "sample-python-token.txt";
 			TokenUtils.saveTokensKind(tokens, path);
 
+			path = "output" + File.separatorChar + "sample-python-token_value.txt";
+			TokenUtils.saveTokensValue(tokens, path);
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

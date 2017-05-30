@@ -11,10 +11,10 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 public class Kmeans {
-	public Kmeans(int dimension){
+	public Kmeans(int dimension) {
 		this.dimension = dimension;
 	}
-	
+
 	public class Node {
 		int label;// label 用来记录点属于第几个 cluster
 		double[] attributes;
@@ -73,6 +73,7 @@ public class Kmeans {
 			}
 			while ((str = br.readLine()) != null) {
 				if (seq == 0) {
+					seq = 1;
 					continue;
 				}
 				strArray = str.split(",");
@@ -125,7 +126,7 @@ public class Kmeans {
 		while (!queue.isEmpty()) {
 			boolean judgeOne = false;
 			boolean judgeTwo = false;
-			//FsQueue 已经按距离的由大到小排序，第一个点就是距离最大的两点
+			// FsQueue 已经按距离的由大到小排序，第一个点就是距离最大的两点
 			NodeComparator nc = FsQueue.poll();
 			if (nc.distance < averageDis)
 				break;// 如果接下来的元组，两节点间距离小于平均距离，则不继续迭代
@@ -161,10 +162,10 @@ public class Kmeans {
 		int numLabel = centroid.size();
 		double gap;
 		DecimalFormat df = new DecimalFormat("#.######");// 保留小数点后6位
-		
+
 		while (true) {// 迭代，直到所有的质心都不变化为止
 			boolean flag = false;
-			//依据与质心的最小距离，标识每个点
+			// 依据与质心的最小距离，标识每个点
 			for (int i = 0; i < arraylist.size(); ++i) {
 				double dis = 0x7fffffff;
 				cnt = 1;
@@ -180,9 +181,9 @@ public class Kmeans {
 			}
 			//
 			int j = 0;
-			numLabel -= 1;
+			// numLabel -= 1;
 			while (j < numLabel) {
-				//node保存了属于每个质心的点的每个属性的总值，c保存了属于每个质心的点的个数
+				// node保存了属于每个质心的点的每个属性的总值，c保存了属于每个质心的点的个数
 				int c = 0;
 				Node node = new Node();
 				for (int i = 0; i < arraylist.size(); ++i) {
@@ -194,23 +195,23 @@ public class Kmeans {
 					}
 				}
 				//
-				
-				//double[] attributelist = new double[dimension];
-				//用每个质心所属点的每个属性的平均值更新质心属性。若质心的属性都不更新，则质心稳定
+
+				// double[] attributelist = new double[dimension];
+				// 用每个质心所属点的每个属性的平均值更新质心属性。若质心的属性都不更新，则质心稳定
 				double attravg;
 				for (int i = 0; i < dimension; ++i) {
-					attravg = 	Double.parseDouble(df.format(node.attributes[i] / c));
-					if(attravg != centroid.get(j).attributes[i]) {
+					attravg = Double.parseDouble(df.format(node.attributes[i] / c));
+					if (attravg != centroid.get(j).attributes[i]) {
 						centroid.get(j).attributes[i] = attravg;
 						flag = true;
 					}
 					/*
-					attributelist[i] = Double.parseDouble(df.format(node.attributes[i] / c));
-					if (attributelist[i] != centroid.get(j).attributes[i]) {
-						centroid.get(j).attributes[i] = attributelist[i];
-						flag = true;
-					}
-					*/
+					 * attributelist[i] =
+					 * Double.parseDouble(df.format(node.attributes[i] / c)); if
+					 * (attributelist[i] != centroid.get(j).attributes[i]) {
+					 * centroid.get(j).attributes[i] = attributelist[i]; flag =
+					 * true; }
+					 */
 				}
 				if (!flag) {
 					cntEnd++;
@@ -227,11 +228,11 @@ public class Kmeans {
 		}
 	}
 
-	public void process(){
+	public void process() {
 		computeTheK();
 		doIteration(centroidList);
 	}
-	
+
 	public void printKmeansResults(String path) {
 		try {
 			PrintStream out = new PrintStream(path);
@@ -245,6 +246,16 @@ public class Kmeans {
 				out.print("(" + arraylist.get(i).seq + ") ");
 				out.println("belongs to cluster " + arraylist.get(i).label);
 			}
+
+			for (int i = 0; i < centroidList.size(); ++i) {
+				out.print("(");
+				for (int j = 0; j < dimension - 1; ++j) {
+					out.print(centroidList.get(i).attributes[j] + ", ");
+				}
+				out.print(centroidList.get(i).attributes[dimension - 1] + ") ");
+				out.println("(cluster " + (i + 1) + " center) ");
+			}
+
 			out.close();
 			System.out.println("Please check results in: " + path);
 		} catch (IOException e) {
