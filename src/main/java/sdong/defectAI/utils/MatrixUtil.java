@@ -8,22 +8,16 @@ public class MatrixUtil {
 		int dimX = matrix.length;
 		int dimY = matrix[0].length;
 		PrintStream out = new PrintStream(path);
-		for (int j = 0; j < dimX; j++) {
-			out.print(String.format("%10d", j));
-			if (j < dimX - 1) {
-				out.print(" , ");
-			}
+		for (int j = 0; j < dimX - 1; j++) {
+			out.print(String.format("%10d", j) + " , ");
 		}
-		out.println();
+		out.println(String.format("%10d", dimX - 1));
 
 		for (int i = 0; i < dimY; i++) {
-			for (int j = 0; j < dimX; j++) {
-				out.print(String.format("%10.6f", matrix[i][j]));
-				if (j < dimX - 1) {
-					out.print(" , ");
-				}
+			for (int j = 0; j < dimX - 1; j++) {
+				out.print(String.format("%10.6f", matrix[i][j]) + " , ");
 			}
-			out.println();
+			out.println(String.format("%10.6f", matrix[i][dimX - 1]));
 		}
 		out.close();
 	}
