@@ -19,7 +19,15 @@ public class TokenUtils {
 		}
 	}
 
-	public static Map<Integer, List<TokenEntry>> getTokensEntry(Tokens tokens) {
+	public static Map<Integer, List<TokenEntry>> getTokensEntry(List<Tokens> tokenlist) {
+		Map<Integer, List<TokenEntry>> entrylist = new TreeMap<Integer, List<TokenEntry>>();
+		for (int i = 0; i < tokenlist.size(); i++) {
+			entrylist.put(i + 1, tokenlist.get(i).getTokens());
+		}
+		return entrylist;
+	}
+
+	public static Map<Integer, List<TokenEntry>> getTokensEntryByLine(Tokens tokens) {
 		Map<Integer, List<TokenEntry>> entrylist = new TreeMap<Integer, List<TokenEntry>>();
 		List<TokenEntry> lineEntry;
 		int lineNo = 0;
@@ -37,6 +45,14 @@ public class TokenUtils {
 		return entrylist;
 	}
 
+	public static Map<Integer, List<Integer>> getTokensKind(List<Tokens> tokenlist) {
+		Map<Integer, List<Integer>> entrylist = new TreeMap<Integer, List<Integer>>();
+		for (int i = 0; i < tokenlist.size(); i++) {
+			entrylist.put(i + 1, getTokenKind(tokenlist.get(i).getTokens()));
+		}
+		return entrylist;
+	}
+
 	public static List<Integer> getTokenKind(List<TokenEntry> entrys) {
 		List<Integer> kinds = new ArrayList<Integer>();
 		for (TokenEntry entry : entrys) {
@@ -45,18 +61,10 @@ public class TokenUtils {
 		return kinds;
 	}
 
-	public static List<String> getTokenValue(List<TokenEntry> entrys) {
-		List<String> values = new ArrayList<String>();
-		for (TokenEntry entry : entrys) {
-			values.add(entry.toString());
-		}
-		return values;
-	}
-
-	public static Map<Integer, List<Integer>> getTokensKind(Tokens tokens) {
+	public static Map<Integer, List<Integer>> getTokensKindByLine(Tokens tokens) {
 		Map<Integer, List<Integer>> kinds = new TreeMap<Integer, List<Integer>>();
 
-		Map<Integer, List<TokenEntry>> entrylist = getTokensEntry(tokens);
+		Map<Integer, List<TokenEntry>> entrylist = getTokensEntryByLine(tokens);
 		for (Map.Entry<Integer, List<TokenEntry>> entry : entrylist.entrySet()) {
 			kinds.put(entry.getKey(), getTokenKind(entry.getValue()));
 		}
@@ -64,18 +72,35 @@ public class TokenUtils {
 		return kinds;
 	}
 
-	public static Map<Integer, List<String>> getTokensValue(Tokens tokens) {
+	public static Map<Integer, List<String>> getTokensValue(List<Tokens> tokenlist) {
+		Map<Integer, List<String>> entrylist = new TreeMap<Integer, List<String>>();
+		for (int i = 0; i < tokenlist.size(); i++) {
+			entrylist.put(i + 1, getTokenValueByEntry(tokenlist.get(i).getTokens()));
+		}
+		return entrylist;
+	}
+
+
+	public static Map<Integer, List<String>> getTokensValueByLine(Tokens tokens) {
 		Map<Integer, List<String>> values = new TreeMap<Integer, List<String>>();
-		Map<Integer, List<TokenEntry>> entrylist = getTokensEntry(tokens);
+		Map<Integer, List<TokenEntry>> entrylist = getTokensEntryByLine(tokens);
 
 		for (Map.Entry<Integer, List<TokenEntry>> entry : entrylist.entrySet()) {
-			values.put(entry.getKey(), getTokenValue(entry.getValue()));
+			values.put(entry.getKey(), getTokenValueByEntry(entry.getValue()));
 		}
 		return values;
 
 	}
 
-	public static void saveTokensKind(Tokens tokens, String fileName) throws FileNotFoundException {
+	public static List<String> getTokenValueByEntry(List<TokenEntry> value) {
+		List<String> values = new ArrayList<String>();
+		for (TokenEntry entry : value) {
+			values.add(entry.toString());
+		}
+		return values;
+	}
+
+	public static void saveTokensKind(List<Tokens> tokens, String fileName) throws FileNotFoundException {
 		Map<Integer, List<Integer>> kinds = getTokensKind(tokens);
 		PrintStream out = new PrintStream(fileName);
 		for (Map.Entry<Integer, List<Integer>> line : kinds.entrySet()) {
@@ -83,8 +108,8 @@ public class TokenUtils {
 		}
 		out.close();
 	}
-	
-	public static void saveTokensValue(Tokens tokens, String fileName) throws FileNotFoundException {
+
+	public static void saveTokensValue(List<Tokens> tokens, String fileName) throws FileNotFoundException {
 		Map<Integer, List<String>> values = getTokensValue(tokens);
 		PrintStream out = new PrintStream(fileName);
 		for (Map.Entry<Integer, List<String>> line : values.entrySet()) {

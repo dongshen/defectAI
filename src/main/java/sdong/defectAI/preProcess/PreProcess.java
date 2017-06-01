@@ -30,13 +30,7 @@ public class PreProcess {
 			// get tokens
 			Tokens tokens = tokenizer.buildTokenizer(fileName);
 
-			// parameterize
-			if (needparameterize == true) {
-				tokens = paramaterize.parameterizeTokens(tokens);
-			}
-
-			// convert to matrix
-			matrix = convertTokensToMatrix(tokens);
+			matrix = convertTokensToMatrixWithParameterize(tokens);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			throw new DefectAIException(e.getMessage());
@@ -44,8 +38,30 @@ public class PreProcess {
 		return matrix;
 	}
 
+	public double[][] process(List<String> strList, String fileName) throws DefectAIException {
+		double[][] matrix;
+		try {
+			// get tokens
+			Tokens tokens = tokenizer.buildTokenizer(strList, fileName);
+			matrix = convertTokensToMatrixWithParameterize(tokens);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			throw new DefectAIException(e.getMessage());
+		}
+		return matrix;
+	}
 
-	public double[][] convertTokensToMatrix(Tokens tokens) {
+	private double[][] convertTokensToMatrixWithParameterize(List<Tokens> tokens) {
+		// parameterize
+		if (needparameterize == true) {
+			tokens = paramaterize.parameterizeTokens(tokens);
+		}
+
+		// convert to matrix
+		return convertTokensToMatrix(tokens);
+	}
+
+	public double[][] convertTokensToMatrix(List<Tokens> tokens) {
 
 		Map<Integer, List<TokenEntry>> entrylist = TokenUtils.getTokensEntry(tokens);
 		double[][] matrix = new double[entrylist.size()][tokenizer.getMaxTokenKindSize()];
@@ -94,6 +110,5 @@ public class PreProcess {
 	public void setNeedparameterize(boolean needparameterize) {
 		this.needparameterize = needparameterize;
 	}
-	
-	
+
 }

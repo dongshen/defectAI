@@ -1,7 +1,9 @@
 package sdong.defectAI.tokenizer;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import net.sourceforge.pmd.cpd.SourceCode;
 import net.sourceforge.pmd.cpd.Tokenizer;
@@ -30,5 +32,12 @@ public abstract class AbstractTokenizer {
 		this.maxTokenKindSize = maxTokenKindSize;
 	}
 	
+	public List<Tokens> buildTokenizer(List<List<String>> list) throws IOException{
+		List<Tokens> tokenlist = new ArrayList<Tokens>();
+		for(List<String> caseCode: list ){
+			tokenlist.add(buildTokenizer(caseCode,""));
+		}
+		return tokenlist;
+	}
 	
 }
