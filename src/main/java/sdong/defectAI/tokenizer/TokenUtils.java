@@ -19,6 +19,95 @@ public class TokenUtils {
 		}
 	}
 
+	public static List<Tokens> splitTokensByLine(Tokens tokens) {
+		List<Tokens> tokenslist = new ArrayList<Tokens>();
+		Map<Integer, List<TokenEntry>> map = getTokensEntryByLine(tokens);
+		Tokens onetokens;
+		for (Map.Entry<Integer, List<TokenEntry>> entrylist : map.entrySet()) {
+			onetokens = new Tokens();
+			for (TokenEntry tokenEntry : entrylist.getValue()) {
+				onetokens.add(tokenEntry);
+			}
+			tokenslist.add(onetokens);
+		}
+		return tokenslist;
+	}
+
+	/**
+	 * Get tokens kind list from list tokens
+	 * 
+	 * @param tokenslist
+	 * @return
+	 */
+	public static List<List<Integer>> getTokensKindList(List<Tokens> tokenslist) {
+		List<List<Integer>> kindlist = new ArrayList<List<Integer>>();
+		for (Tokens tokens : tokenslist) {
+			kindlist.add(getTokensKind(tokens));
+		}
+		return kindlist;
+	}
+
+	/**
+	 * Get tokens kind from tokens
+	 * 
+	 * @param tokens
+	 * @return
+	 */
+	public static List<Integer> getTokensKind(Tokens tokens) {
+		return getTokensKind(tokens.getTokens());
+	}
+
+	/**
+	 * Get tokens kind by list TokenEntry
+	 * 
+	 * @param entrys
+	 * @return
+	 */
+	public static List<Integer> getTokensKind(List<TokenEntry> entrys) {
+		List<Integer> kindlist = new ArrayList<Integer>();
+		for (TokenEntry entry : entrys) {
+			if (entry.getKind() != 0) {
+				kindlist.add(entry.getKind());
+			}
+		}
+		return kindlist;
+	}
+
+	/**
+	 * Get tokens kind as string list from list tokens
+	 * 
+	 * @param tokenslist
+	 * @return
+	 */
+	public static List<List<String>> getTokensKindListAsStr(List<Tokens> tokenslist) {
+		List<List<String>> kindlist = new ArrayList<List<String>>();
+		for (Tokens tokens : tokenslist) {
+			kindlist.add(getTokensKindAsStr(tokens));
+		}
+		return kindlist;
+	}
+
+	/**
+	 * Get token kind as string from tokens
+	 * 
+	 * @param tokens
+	 * @return
+	 */
+	public static List<String> getTokensKindAsStr(Tokens tokens) {
+		return getTokensKindAsStr(tokens.getTokens());
+	}
+
+	public static List<String> getTokensKindAsStr(List<TokenEntry> entrys) {
+		List<String> kindlist = new ArrayList<String>();
+		for (TokenEntry entry : entrys) {
+			if (entry.getKind() != 0) {
+				kindlist.add(entry.getKind() + "");
+			}
+		}
+		return kindlist;
+	}
+
+	
 	public static Map<Integer, List<TokenEntry>> getTokensEntry(List<Tokens> tokenlist) {
 		Map<Integer, List<TokenEntry>> entrylist = new TreeMap<Integer, List<TokenEntry>>();
 		for (int i = 0; i < tokenlist.size(); i++) {
@@ -27,6 +116,27 @@ public class TokenUtils {
 		return entrylist;
 	}
 
+	public static Map<Integer, List<Integer>> getTokensKindByLine(Tokens tokens) {
+		Map<Integer, List<Integer>> kinds = new TreeMap<Integer, List<Integer>>();
+
+		Map<Integer, List<TokenEntry>> entrylist = getTokensEntryByLine(tokens);
+		for (Map.Entry<Integer, List<TokenEntry>> entry : entrylist.entrySet()) {
+			kinds.put(entry.getKey(), getTokensKind(entry.getValue()));
+		}
+
+		return kinds;
+	}
+
+	public static Map<Integer, List<String>> getTokensKindByLineAsStr(Tokens tokens) {
+		Map<Integer, List<String>> kinds = new TreeMap<Integer, List<String>>();
+
+		Map<Integer, List<TokenEntry>> entrylist = getTokensEntryByLine(tokens);
+		for (Map.Entry<Integer, List<TokenEntry>> entry : entrylist.entrySet()) {
+			kinds.put(entry.getKey(), getTokensKindAsStr(entry.getValue()));
+		}
+
+		return kinds;
+	}
 	public static Map<Integer, List<TokenEntry>> getTokensEntryByLine(Tokens tokens) {
 		Map<Integer, List<TokenEntry>> entrylist = new TreeMap<Integer, List<TokenEntry>>();
 		List<TokenEntry> lineEntry;
@@ -45,75 +155,75 @@ public class TokenUtils {
 		return entrylist;
 	}
 
-	public static Map<Integer, List<Integer>> getTokensKind(List<Tokens> tokenlist) {
-		Map<Integer, List<Integer>> entrylist = new TreeMap<Integer, List<Integer>>();
-		for (int i = 0; i < tokenlist.size(); i++) {
-			entrylist.put(i + 1, getTokenKind(tokenlist.get(i).getTokens()));
+	public static List<List<String>> getTokensValueList(List<Tokens> tokenslist) {
+		List<List<String>> valuelist = new ArrayList<List<String>>();
+		for (Tokens tokens : tokenslist) {
+			valuelist.add(getTokensValue(tokens));
 		}
-		return entrylist;
+		return valuelist;
 	}
 
-	public static List<Integer> getTokenKind(List<TokenEntry> entrys) {
-		List<Integer> kinds = new ArrayList<Integer>();
+	public static List<String> getTokensValue(Tokens tokens) {
+		return getTokensValue(tokens.getTokens());
+	}
+
+	public static List<String> getTokensValue(List<TokenEntry> entrys) {
+		List<String> valuelist = new ArrayList<String>();
 		for (TokenEntry entry : entrys) {
-			kinds.add(entry.getKind());
+			valuelist.add(entry.toString());
 		}
-		return kinds;
+		return valuelist;
 	}
-
-	public static Map<Integer, List<Integer>> getTokensKindByLine(Tokens tokens) {
-		Map<Integer, List<Integer>> kinds = new TreeMap<Integer, List<Integer>>();
-
-		Map<Integer, List<TokenEntry>> entrylist = getTokensEntryByLine(tokens);
-		for (Map.Entry<Integer, List<TokenEntry>> entry : entrylist.entrySet()) {
-			kinds.put(entry.getKey(), getTokenKind(entry.getValue()));
-		}
-
-		return kinds;
-	}
-
-	public static Map<Integer, List<String>> getTokensValue(List<Tokens> tokenlist) {
-		Map<Integer, List<String>> entrylist = new TreeMap<Integer, List<String>>();
-		for (int i = 0; i < tokenlist.size(); i++) {
-			entrylist.put(i + 1, getTokenValueByEntry(tokenlist.get(i).getTokens()));
-		}
-		return entrylist;
-	}
-
 
 	public static Map<Integer, List<String>> getTokensValueByLine(Tokens tokens) {
 		Map<Integer, List<String>> values = new TreeMap<Integer, List<String>>();
 		Map<Integer, List<TokenEntry>> entrylist = getTokensEntryByLine(tokens);
 
 		for (Map.Entry<Integer, List<TokenEntry>> entry : entrylist.entrySet()) {
-			values.put(entry.getKey(), getTokenValueByEntry(entry.getValue()));
+			values.put(entry.getKey(), getTokensValue(entry.getValue()));
 		}
 		return values;
 
 	}
 
-	public static List<String> getTokenValueByEntry(List<TokenEntry> value) {
-		List<String> values = new ArrayList<String>();
-		for (TokenEntry entry : value) {
-			values.add(entry.toString());
-		}
-		return values;
+	public static void saveTokensKind(Tokens tokens, String fileName) throws FileNotFoundException {
+		saveTokensKind(splitTokensByLine(tokens), fileName);
 	}
 
-	public static void saveTokensKind(List<Tokens> tokens, String fileName) throws FileNotFoundException {
-		Map<Integer, List<Integer>> kinds = getTokensKind(tokens);
+	/**
+	 * Save tokens kind by list tokens
+	 * 
+	 * @param tokenslist
+	 * @param fileName
+	 * @throws FileNotFoundException
+	 */
+	public static void saveTokensKind(List<Tokens> tokenslist, String fileName) throws FileNotFoundException {
 		PrintStream out = new PrintStream(fileName);
-		for (Map.Entry<Integer, List<Integer>> line : kinds.entrySet()) {
-			out.println(line.getKey() + "=" + line.getValue().toString());
+		int line = 0;
+		for (Tokens tokens : tokenslist) {
+			out.println(line + "=" + String.join(",", getTokensKindAsStr(tokens)));
+			line = line + 1;
 		}
 		out.close();
 	}
 
-	public static void saveTokensValue(List<Tokens> tokens, String fileName) throws FileNotFoundException {
-		Map<Integer, List<String>> values = getTokensValue(tokens);
+	public static void saveTokensValue(Tokens tokens, String fileName) throws FileNotFoundException {
+		saveTokensValue(splitTokensByLine(tokens), fileName);
+	}
+
+	/**
+	 * Save token value by list tokens
+	 * 
+	 * @param tokenslist
+	 * @param fileName
+	 * @throws FileNotFoundException
+	 */
+	public static void saveTokensValue(List<Tokens> tokenslist, String fileName) throws FileNotFoundException {
 		PrintStream out = new PrintStream(fileName);
-		for (Map.Entry<Integer, List<String>> line : values.entrySet()) {
-			out.println(line.getKey() + "=" + line.getValue().toString());
+		int line = 0;
+		for (Tokens tokens : tokenslist) {
+			out.println(line + "=" + String.join(",", getTokensValue(tokens)));
+			line = line + 1;
 		}
 		out.close();
 	}

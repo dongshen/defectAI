@@ -2,11 +2,8 @@ package sdong.defectAI.preProcess;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
-import net.sourceforge.pmd.cpd.TokenEntry;
 import net.sourceforge.pmd.cpd.Tokens;
-import sdong.defectAI.exception.DefectAIException;
 import sdong.defectAI.parameterize.Parameterize;
 import sdong.defectAI.tokenizer.AbstractTokenizer;
 import sdong.defectAI.tokenizer.TokenUtils;
@@ -24,60 +21,45 @@ public class PreProcess {
 		tokenizer = new TokenizerPython();
 	}
 
-	public double[][] process(String fileName) throws DefectAIException {
-		double[][] matrix;
-		try {
-			// get tokens
-			Tokens tokens = tokenizer.buildTokenizer(fileName);
+	public double[][] process(String fileName) throws IOException {
+		return convertTokensListToMatrix(getTokensFromFile(fileName));
+	}
 
-			matrix = convertTokensToMatrixWithParameterize(tokens);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			throw new DefectAIException(e.getMessage());
+	public double[][] process(List<List<String>> list, String fileName) throws IOException {
+		return convertTokensListToMatrix(getTokensFromStrList(list, fileName));
+	}
+
+	private List<Tokens> getTokensFromFile(String fileName) throws IOException {
+		// get tokens
+		return tokenizer.buildTokenizerList(fileName);
+	}
+
+	private List<Tokens> getTokensFromStrList(List<List<String>> list, String fileName) throws IOException {
+		// get tokens
+		return tokenizer.buildTokenizerList(list, fileName);
+	}
+
+	public double[][] convertTokensListToMatrix(List<Tokens> tokenslist) {
+
+		double[][] matrix = new double[tokenslist.size()][tokenizer.getMaxTokenKindSize()];
+
+		for (int i = 0; i < tokenslist.size(); i++) {
+			matrix[i] = converTokensToMatrix(tokenslist.get(i));
 		}
+
 		return matrix;
 	}
 
-	public double[][] process(List<String> strList, String fileName) throws DefectAIException {
-		double[][] matrix;
-		try {
-			// get tokens
-			Tokens tokens = tokenizer.buildTokenizer(strList, fileName);
-			matrix = convertTokensToMatrixWithParameterize(tokens);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			throw new DefectAIException(e.getMessage());
-		}
-		return matrix;
-	}
+	public double[] converTokensToMatrix(Tokens tokens) {
 
-	private double[][] convertTokensToMatrixWithParameterize(List<Tokens> tokens) {
+		double[] matrix = new double[tokenizer.getMaxTokenKindSize()];
+
 		// parameterize
 		if (needparameterize == true) {
 			tokens = paramaterize.parameterizeTokens(tokens);
 		}
 
-		// convert to matrix
-		return convertTokensToMatrix(tokens);
-	}
-
-	public double[][] convertTokensToMatrix(List<Tokens> tokens) {
-
-		Map<Integer, List<TokenEntry>> entrylist = TokenUtils.getTokensEntry(tokens);
-		double[][] matrix = new double[entrylist.size()][tokenizer.getMaxTokenKindSize()];
-
-		int line = 0;
-		for (Map.Entry<Integer, List<TokenEntry>> entry : entrylist.entrySet()) {
-			matrix[line] = this.convertKindToMatrix(TokenUtils.getTokenKind(entry.getValue()));
-			line = line + 1;
-		}
-
-		return matrix;
-	}
-
-	public double[] convertKindToMatrix(List<Integer> kinds) {
-		double[] matrix = new double[tokenizer.getMaxTokenKindSize()];
-
+		List<Integer> kinds = TokenUtils.getTokensKind(tokens);
 		for (Integer kind : kinds) {
 			if (kind != 0) {
 				matrix[kind] = matrix[kind] + 1;

@@ -2,6 +2,7 @@ package sdong.defectAI.parameterize;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +18,7 @@ import sdong.defectAI.tokenizer.TokenizerPython;
 public class ParameterizeTest {
 
 	@Test
-	public void testProcess_file() {
+	public void testParameterizeTokens_file() {
 
 		try {
 
@@ -25,9 +26,29 @@ public class ParameterizeTest {
 			TokenizerPython tokenizer = new TokenizerPython();
 			Tokens tokens = tokenizer.buildTokenizer(fileName);
 
+			// check value
+			Map<Integer, List<String>> map = TokenUtils.getTokensValueByLine(tokens);
+			assertEquals("non_atomic_requests,=,getattr,(,view,,,'_non_atomic_requests',,,set,(,),)",
+					String.join(",", map.get(78)));
+			// check kind
+			map = TokenUtils.getTokensKindByLineAsStr(tokens);
+			assertEquals("82,30,82,7,82,14,104,14,82,7,8,8", String.join(",", map.get(78)));
+
 			Parameterize parameterize = new Parameterize();
 			tokens = parameterize.parameterizeTokens(tokens);
-			TokenUtils.printTokensInfo(tokens);
+
+			// check value
+			map = TokenUtils.getTokensValueByLine(tokens);
+			assertEquals("non_atomic_requests,=,getattr,(,view,,,'_non_atomic_requests',,,set,(,),)",
+					String.join(",", map.get(78)));
+			// check kind
+			map = TokenUtils.getTokensKindByLineAsStr(tokens);
+			assertEquals("82,30,199,7,82,14,104,14,199,7,8,8", String.join(",", map.get(78)));
+
+			// save kind
+			TokenUtils.saveTokensKind(tokens, "output" + File.separatorChar + "sample-python_parameterize_kind.txt");
+			// save value
+			TokenUtils.saveTokensValue(tokens, "output" + File.separatorChar + "sample-python_parameterize_value.txt");
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -36,7 +57,7 @@ public class ParameterizeTest {
 	}
 
 	@Test
-	public void testProcess_String() {
+	public void testParameterizeTokens_String() {
 
 		try {
 			TokenizerPython tokenizer = new TokenizerPython();
@@ -48,15 +69,15 @@ public class ParameterizeTest {
 			strList.add("response = self.handle_uncaught_exception(request, resolver, sys.exc_info())");
 			Tokens tokens = tokenizer.buildTokenizer(strList, "test");
 			TokenUtils.printTokensInfo(tokens);
-			
+
 			Parameterize parameterize = new Parameterize();
 			tokens = parameterize.parameterizeTokens(tokens);
-			Map<Integer, List<Integer>> mapkind = TokenUtils.getTokensKind(tokens);
+			Map<Integer, List<Integer>> mapkind = TokenUtils.getTokensKindByLine(tokens);
 			assertEquals("[82, 30, 199, 7, 104, 8]", mapkind.get(1).toString());
 			assertEquals("[63, 199, 7, 82, 8, 16]", mapkind.get(2).toString());
 			assertEquals("[199, 7, 82, 30, 82, 14, 82, 30, 82, 8]", mapkind.get(3).toString());
 			assertEquals("[82, 30, 199, 7, 82, 14, 82, 14, 199, 7, 8, 8]", mapkind.get(4).toString());
-			Map<Integer, List<String>> mapValue = TokenUtils.getTokensValue(tokens);
+			Map<Integer, List<String>> mapValue = TokenUtils.getTokensValueByLine(tokens);
 			assertEquals("[logger, =, logging.getLogger, (, 'django.request', )]", mapValue.get(1).toString());
 			assertEquals("[def, __init__, (, self, ), :]", mapValue.get(2).toString());
 			assertEquals(
