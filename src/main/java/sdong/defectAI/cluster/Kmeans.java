@@ -7,8 +7,10 @@ import java.io.PrintStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.TreeMap;
 
 public class Kmeans {
 	public Kmeans(int dimension) {
@@ -19,6 +21,7 @@ public class Kmeans {
 		int label;// label 用来记录点属于第几个 cluster
 		double[] attributes;
 		long seq;
+		String classify;
 
 		public Node() {
 			attributes = new double[dimension];
@@ -49,7 +52,8 @@ public class Kmeans {
 	private ArrayList<Node> centroidList;
 	private double averageDis;
 	private int dimension;
-	private Queue<NodeComparator> FsQueue = new PriorityQueue<NodeComparator>(150, // 用来排序任意两点之间的距离，从大到小排
+
+	private Queue<NodeComparator> FsQueue = new PriorityQueue<NodeComparator>(100000, // 用来排序任意两点之间的距离，从大到小排
 			new Comparator<NodeComparator>() {
 				public int compare(NodeComparator one, NodeComparator two) {
 					if (one.distance < two.distance)
@@ -80,10 +84,18 @@ public class Kmeans {
 				Node node = new Node();
 				node.setSeq(seq);
 				seq = seq + 1;
+				if (strArray.length < dimension) {
+					continue;
+				}
 				for (int i = 0; i < dimension; ++i) {
 					node.attributes[i] = Double.parseDouble(strArray[i]);
 				}
+
+				if (strArray.length > dimension) {
+					node.classify = strArray[strArray.length - 1];
+				}
 				arraylist.add(node);
+
 			}
 			br.close();
 		} catch (IOException e) {
@@ -181,7 +193,6 @@ public class Kmeans {
 			}
 			//
 			int j = 0;
-			// numLabel -= 1;
 			while (j < numLabel) {
 				// node保存了属于每个质心的点的每个属性的总值，c保存了属于每个质心的点的个数
 				int c = 0;
@@ -194,9 +205,7 @@ public class Kmeans {
 						c++;
 					}
 				}
-				//
 
-				// double[] attributelist = new double[dimension];
 				// 用每个质心所属点的每个属性的平均值更新质心属性。若质心的属性都不更新，则质心稳定
 				double attravg;
 				for (int i = 0; i < dimension; ++i) {
@@ -205,13 +214,6 @@ public class Kmeans {
 						centroid.get(j).attributes[i] = attravg;
 						flag = true;
 					}
-					/*
-					 * attributelist[i] =
-					 * Double.parseDouble(df.format(node.attributes[i] / c)); if
-					 * (attributelist[i] != centroid.get(j).attributes[i]) {
-					 * centroid.get(j).attributes[i] = attributelist[i]; flag =
-					 * true; }
-					 */
 				}
 				if (!flag) {
 					cntEnd++;
@@ -233,27 +235,50 @@ public class Kmeans {
 		doIteration(centroidList);
 	}
 
+	public Map<Integer, String> getClusterList() {
+		Map<Integer, String> map = new TreeMap<Integer, String>();
+
+		String str;
+		for (int i = 0; i < arraylist.size(); ++i) {
+			str = map.get(arraylist.get(i).label);
+			if (str == null) {
+				map.put(arraylist.get(i).label, arraylist.get(i).seq + "");
+			} else {
+				map.put(arraylist.get(i).label, str + ", " + arraylist.get(i).seq);
+			}
+		}
+
+		return map;
+	}
+
 	public void printKmeansResults(String path) {
 		try {
 			PrintStream out = new PrintStream(path);
 			out.println("There are " + centroidList.size() + " clusters!");
+			// print cluster detail
 			for (int i = 0; i < arraylist.size(); ++i) {
-				out.print("(");
+				out.print("(" + arraylist.get(i).seq + ") ");
+				out.print("( " + arraylist.get(i).label + " ) (");
 				for (int j = 0; j < dimension - 1; ++j) {
 					out.print(arraylist.get(i).attributes[j] + ", ");
 				}
-				out.print(arraylist.get(i).attributes[dimension - 1] + ") ");
-				out.print("(" + arraylist.get(i).seq + ") ");
-				out.println("belongs to cluster " + arraylist.get(i).label);
-			}
+				out.println(arraylist.get(i).attributes[dimension - 1] + ") ");
 
+			}
+			// print center
 			for (int i = 0; i < centroidList.size(); ++i) {
-				out.print("(");
+				out.print("(cluster " + (i + 1) + " center) (");
 				for (int j = 0; j < dimension - 1; ++j) {
 					out.print(centroidList.get(i).attributes[j] + ", ");
 				}
-				out.print(centroidList.get(i).attributes[dimension - 1] + ") ");
-				out.println("(cluster " + (i + 1) + " center) ");
+				out.println(centroidList.get(i).attributes[dimension - 1] + ") ");
+
+			}
+
+			// print cluster
+			Map<Integer, String> map = this.getClusterList();
+			for (Integer key : map.keySet()) {
+				out.println("cluster " + key + " : " + map.get(key));
 			}
 
 			out.close();

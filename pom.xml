@@ -40,6 +40,14 @@
 			<version>5.6.1</version>
 		</dependency>
 
+        <dependency>
+            <groupId>net.sf</groupId>
+            <artifactId>javaml</artifactId>
+            <version>0.1.7</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/javaml-0.1.7.jar</systemPath>
+        </dependency>
+
 		<!-- https://mvnrepository.com/artifact/junit/junit -->
 		<dependency>
 			<groupId>junit</groupId>

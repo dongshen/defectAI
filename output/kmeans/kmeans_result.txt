@@ -1,21 +1,25 @@
 There are 4 clusters!
-(1.0, 1.0) (1) belongs to cluster 1
-(2.0, 1.0) (2) belongs to cluster 1
-(1.0, 2.0) (3) belongs to cluster 1
-(2.0, 2.0) (4) belongs to cluster 1
-(6.0, 1.0) (5) belongs to cluster 3
-(6.0, 2.0) (6) belongs to cluster 3
-(7.0, 1.0) (7) belongs to cluster 3
-(7.0, 2.0) (8) belongs to cluster 3
-(1.0, 5.0) (9) belongs to cluster 4
-(1.0, 6.0) (10) belongs to cluster 4
-(2.0, 5.0) (11) belongs to cluster 4
-(2.0, 6.0) (12) belongs to cluster 4
-(6.0, 5.0) (13) belongs to cluster 2
-(6.0, 6.0) (14) belongs to cluster 2
-(7.0, 5.0) (15) belongs to cluster 2
-(7.0, 6.0) (16) belongs to cluster 2
-(1.5, 1.5) (cluster 1 center) 
-(6.5, 5.5) (cluster 2 center) 
-(6.5, 1.5) (cluster 3 center) 
-(1.5, 5.5) (cluster 4 center) 
+(1) ( 1 ) (1.0, 1.0) 
+(2) ( 1 ) (2.0, 1.0) 
+(3) ( 1 ) (1.0, 2.0) 
+(4) ( 1 ) (2.0, 2.0) 
+(5) ( 3 ) (6.0, 1.0) 
+(6) ( 3 ) (6.0, 2.0) 
+(7) ( 3 ) (7.0, 1.0) 
+(8) ( 3 ) (7.0, 2.0) 
+(9) ( 4 ) (1.0, 5.0) 
+(10) ( 4 ) (1.0, 6.0) 
+(11) ( 4 ) (2.0, 5.0) 
+(12) ( 4 ) (2.0, 6.0) 
+(13) ( 2 ) (6.0, 5.0) 
+(14) ( 2 ) (6.0, 6.0) 
+(15) ( 2 ) (7.0, 5.0) 
+(16) ( 2 ) (7.0, 6.0) 
+(cluster 1 center) (1.5, 1.5) 
+(cluster 2 center) (6.5, 5.5) 
+(cluster 3 center) (6.5, 1.5) 
+(cluster 4 center) (1.5, 5.5) 
+cluster 1 : 1, 2, 3, 4
+cluster 2 : 13, 14, 15, 16
+cluster 3 : 5, 6, 7, 8
+cluster 4 : 9, 10, 11, 12
