@@ -1,6 +1,9 @@
 package sdong.defectAI.tokenizer;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +12,7 @@ import java.util.TreeMap;
 
 import net.sourceforge.pmd.cpd.TokenEntry;
 import net.sourceforge.pmd.cpd.Tokens;
+import sdong.defectAI.cluster.Kmeans.Node;
 
 public class TokenUtils {
 	public static void printTokensInfo(Tokens tokens) {
@@ -107,7 +111,6 @@ public class TokenUtils {
 		return kindlist;
 	}
 
-	
 	public static Map<Integer, List<TokenEntry>> getTokensEntry(List<Tokens> tokenlist) {
 		Map<Integer, List<TokenEntry>> entrylist = new TreeMap<Integer, List<TokenEntry>>();
 		for (int i = 0; i < tokenlist.size(); i++) {
@@ -137,6 +140,7 @@ public class TokenUtils {
 
 		return kinds;
 	}
+
 	public static Map<Integer, List<TokenEntry>> getTokensEntryByLine(Tokens tokens) {
 		Map<Integer, List<TokenEntry>> entrylist = new TreeMap<Integer, List<TokenEntry>>();
 		List<TokenEntry> lineEntry;
@@ -186,6 +190,21 @@ public class TokenUtils {
 
 	}
 
+	public static List<String> getTokensValueFromFile(String path) throws FileNotFoundException {
+		List<String> valuelist = new ArrayList<String>();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(path));
+			String str;
+			while ((str = br.readLine()) != null) {
+				valuelist.add(str);
+			}
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return valuelist;
+	}
+
 	public static void saveTokensKind(Tokens tokens, String fileName) throws FileNotFoundException {
 		saveTokensKind(splitTokensByLine(tokens), fileName);
 	}
@@ -227,4 +246,5 @@ public class TokenUtils {
 		}
 		out.close();
 	}
+
 }
