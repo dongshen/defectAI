@@ -13,6 +13,19 @@ import sdong.defectAI.constant.DefectAIConstant;
 public class kmeansTest {
 
 	@Test
+	public void testSetKmeansInput_with_class() {
+		String input = "input" + File.separatorChar + "kmeans" + File.separatorChar + "iris.data";
+
+		Kmeans kmeans = new Kmeans(4);
+		kmeans.setKmeansInput(input);
+		assertEquals(150,kmeans.getArraylist().size());
+		assertEquals("Iris-setosa",kmeans.getArraylist().get(0).classify);
+		assertEquals("Iris-versicolor",kmeans.getArraylist().get(50).classify);
+		assertEquals("Iris-virginica",kmeans.getArraylist().get(100).classify);
+
+	}
+
+	@Test
 	public void testProcess_test() {
 		String input = "input" + File.separatorChar + "kmeans" + File.separatorChar + "kmeans_test.txt";
 		String outputFile = "output" + File.separatorChar + "kmeans" + File.separatorChar + "kmeans_result.txt";
@@ -56,7 +69,7 @@ public class kmeansTest {
 		ArrayList<Node> centerlist = kmeans.getCentroidList();
 		kmeans.printKmeansResults(outputFile);
 	}
-	
+
 	@Test
 	public void testProcess_sample_python_matrix_weight() {
 		String input = "output" + File.separatorChar + "sample-python_matrix_weight.txt";
@@ -68,7 +81,7 @@ public class kmeansTest {
 		ArrayList<Node> centerlist = kmeans.getCentroidList();
 		kmeans.printKmeansResults(outputFile);
 	}
-	
+
 	@Test
 	public void testProcess_sample_python_matrix_parameterize() {
 		String input = "output" + File.separatorChar + "sample-python_matrix_parameterize.txt";
@@ -92,17 +105,16 @@ public class kmeansTest {
 		ArrayList<Node> centerlist = kmeans.getCentroidList();
 		kmeans.printKmeansResults(outputFile);
 	}
-	
+
 	@Test
 	public void testProcess_iris() {
-		String input = "input" + File.separatorChar+"kmeans"+File.separatorChar + "iris.data";
-		String outputFile = "output" + File.separatorChar + "kmeans" + File.separatorChar
-				+ "iris_result.txt";
+		String input = "input" + File.separatorChar + "kmeans" + File.separatorChar + "iris.data";
+		String outputFile = "output" + File.separatorChar + "kmeans" + File.separatorChar + "iris_result.txt";
 		Kmeans kmeans = new Kmeans(4);
 		kmeans.setKmeansInput(input, false);
 		kmeans.process();
 		ArrayList<Node> centerlist = kmeans.getCentroidList();
 		kmeans.printKmeansResults(outputFile);
-		
+
 	}
 }

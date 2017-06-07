@@ -13,6 +13,7 @@ import java.util.Queue;
 import java.util.TreeMap;
 
 public class Kmeans {
+	
 	public Kmeans(int dimension) {
 		this.dimension = dimension;
 	}
@@ -22,6 +23,7 @@ public class Kmeans {
 		double[] attributes;
 		long seq;
 		String classify;
+		double distance;
 
 		public Node() {
 			attributes = new double[dimension];
@@ -52,6 +54,8 @@ public class Kmeans {
 	private ArrayList<Node> centroidList;
 	private double averageDis;
 	private int dimension;
+	
+	DecimalFormat df = new DecimalFormat("#.######");// 保留小数点后6位
 
 	private Queue<NodeComparator> FsQueue = new PriorityQueue<NodeComparator>(100000, // 用来排序任意两点之间的距离，从大到小排
 			new Comparator<NodeComparator>() {
@@ -65,19 +69,29 @@ public class Kmeans {
 				}
 			});
 
+	/**
+	 * Initial input, the default data without header and the if the kmeans
+	 * attribute size is more than split cloumns, the latest column as class.
+	 * 
+	 * @param path
+	 */
+	public void setKmeansInput(String path) {
+		setKmeansInput(path, false);
+	}
+
 	public void setKmeansInput(String path, boolean includeHeader) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path));
 			String str;
 			String[] strArray;
 			arraylist = new ArrayList<Node>();
-			long seq = 1;
+			long seq = 0;
 			if (includeHeader == true) {
-				seq = 0;
+				seq = -1;
 			}
 			while ((str = br.readLine()) != null) {
-				if (seq == 0) {
-					seq = 1;
+				if (seq == -1) {
+					seq = 0;
 					continue;
 				}
 				strArray = str.split(",");
@@ -173,7 +187,7 @@ public class Kmeans {
 		int cntEnd = 0;
 		int numLabel = centroid.size();
 		double gap;
-		DecimalFormat df = new DecimalFormat("#.######");// 保留小数点后6位
+		
 
 		while (true) {// 迭代，直到所有的质心都不变化为止
 			boolean flag = false;
@@ -187,6 +201,7 @@ public class Kmeans {
 					if (gap < dis) {
 						dis = gap;
 						arraylist.get(i).label = cnt;
+						arraylist.get(i).distance = gap;
 					}
 					cnt++;
 				}
@@ -256,15 +271,31 @@ public class Kmeans {
 			PrintStream out = new PrintStream(path);
 			out.println("There are " + centroidList.size() + " clusters!");
 			// print cluster detail
-			for (int i = 0; i < arraylist.size(); ++i) {
-				out.print("(" + arraylist.get(i).seq + ") ");
-				out.print("( " + arraylist.get(i).label + " ) (");
-				for (int j = 0; j < dimension - 1; ++j) {
-					out.print(arraylist.get(i).attributes[j] + ", ");
+			Map<Integer, String> map = this.getClusterList();
+			String clusterlist;
+			int ind;
+			for (Integer key : map.keySet()) {
+				out.println("cluster " + key + " : ");
+				out.println("----------------------");
+				clusterlist = map.get(key);
+				for (String index : clusterlist.split(",")) {
+					ind = Integer.parseInt(index.trim());
+					for (int j = 0; j < dimension; ++j) {
+						out.print(arraylist.get(ind).attributes[j] + ", ");
+					}
+					out.println(arraylist.get(ind).classify + ", " + df.format(arraylist.get(ind).distance));
 				}
-				out.println(arraylist.get(i).attributes[dimension - 1] + ") ");
-
+				out.println("----------------------");
 			}
+			/*
+			 * for (int i = 0; i < arraylist.size(); ++i) { out.print("(" +
+			 * arraylist.get(i).seq + ") "); out.print("( " +
+			 * arraylist.get(i).label + " ) ("); for (int j = 0; j < dimension;
+			 * ++j) { out.print(arraylist.get(i).attributes[j] + ", "); }
+			 * out.println(arraylist.get(i).classify + ") ");
+			 * 
+			 * }
+			 */
 			// print center
 			for (int i = 0; i < centroidList.size(); ++i) {
 				out.print("(cluster " + (i + 1) + " center) (");
@@ -276,7 +307,6 @@ public class Kmeans {
 			}
 
 			// print cluster
-			Map<Integer, String> map = this.getClusterList();
 			for (Integer key : map.keySet()) {
 				out.println("cluster " + key + " : " + map.get(key));
 			}
