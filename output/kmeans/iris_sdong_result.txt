@@ -1,0 +1,169 @@
+There are 3 clusters!
+cluster 1 : 
+----------------------
+5.1, 3.5, 1.4, 0.2, Iris-setosa, 0.021592
+4.9, 3.0, 1.4, 0.2, Iris-setosa, 0.191992
+4.7, 3.2, 1.3, 0.2, Iris-setosa, 0.169992
+4.6, 3.1, 1.5, 0.2, Iris-setosa, 0.269192
+5.0, 3.6, 1.4, 0.2, Iris-setosa, 0.039192
+5.4, 3.9, 1.7, 0.4, Iris-setosa, 0.467592
+4.6, 3.4, 1.4, 0.3, Iris-setosa, 0.172392
+5.0, 3.4, 1.5, 0.2, Iris-setosa, 0.003592
+4.4, 2.9, 1.4, 0.2, Iris-setosa, 0.641592
+4.9, 3.1, 1.5, 0.1, Iris-setosa, 0.134392
+5.4, 3.7, 1.5, 0.2, Iris-setosa, 0.237992
+4.8, 3.4, 1.6, 0.2, Iris-setosa, 0.063192
+4.8, 3.0, 1.4, 0.1, Iris-setosa, 0.241992
+4.3, 3.0, 1.1, 0.1, Iris-setosa, 0.826392
+5.8, 4.0, 1.2, 0.2, Iris-setosa, 1.040792
+5.7, 4.4, 1.5, 0.4, Iris-setosa, 1.471592
+5.4, 3.9, 1.3, 0.4, Iris-setosa, 0.438792
+5.1, 3.5, 1.4, 0.3, Iris-setosa, 0.022792
+5.7, 3.8, 1.7, 0.3, Iris-setosa, 0.686392
+5.1, 3.8, 1.5, 0.3, Iris-setosa, 0.159192
+5.4, 3.4, 1.7, 0.2, Iris-setosa, 0.213192
+5.1, 3.7, 1.5, 0.4, Iris-setosa, 0.113992
+4.6, 3.6, 1.0, 0.2, Iris-setosa, 0.415192
+5.1, 3.3, 1.7, 0.5, Iris-setosa, 0.143992
+4.8, 3.4, 1.9, 0.2, Iris-setosa, 0.234792
+5.0, 3.0, 1.6, 0.2, Iris-setosa, 0.195192
+5.0, 3.4, 1.6, 0.4, Iris-setosa, 0.043192
+5.2, 3.5, 1.5, 0.2, Iris-setosa, 0.047592
+5.2, 3.4, 1.4, 0.2, Iris-setosa, 0.043992
+4.7, 3.2, 1.6, 0.2, Iris-setosa, 0.161592
+4.8, 3.1, 1.6, 0.2, Iris-setosa, 0.163992
+5.4, 3.4, 1.5, 0.4, Iris-setosa, 0.181192
+5.2, 4.1, 1.5, 0.1, Iris-setosa, 0.524792
+5.5, 4.2, 1.4, 0.2, Iris-setosa, 0.861592
+4.9, 3.1, 1.5, 0.1, Iris-setosa, 0.134392
+5.0, 3.2, 1.2, 0.2, Iris-setosa, 0.119192
+5.5, 3.5, 1.3, 0.2, Iris-setosa, 0.279592
+4.9, 3.1, 1.5, 0.1, Iris-setosa, 0.134392
+4.4, 3.0, 1.3, 0.2, Iris-setosa, 0.570792
+5.1, 3.4, 1.5, 0.2, Iris-setosa, 0.012392
+5.0, 3.5, 1.3, 0.3, Iris-setosa, 0.036792
+4.5, 2.3, 1.3, 0.3, Iris-setosa, 1.535992
+4.4, 3.2, 1.3, 0.2, Iris-setosa, 0.443592
+5.0, 3.5, 1.6, 0.6, Iris-setosa, 0.151992
+5.1, 3.8, 1.9, 0.4, Iris-setosa, 0.369192
+4.8, 3.0, 1.4, 0.3, Iris-setosa, 0.224392
+5.1, 3.8, 1.6, 0.2, Iris-setosa, 0.175192
+4.6, 3.2, 1.4, 0.2, Iris-setosa, 0.218392
+5.3, 3.7, 1.5, 0.2, Iris-setosa, 0.169192
+5.0, 3.3, 1.4, 0.2, Iris-setosa, 0.019992
+----------------------
+cluster 2 : 
+----------------------
+6.7, 3.0, 5.0, 1.7, Iris-versicolor, 0.93
+6.3, 3.3, 6.0, 2.5, Iris-virginica, 0.5
+7.1, 3.0, 5.9, 2.1, Iris-virginica, 0.16
+6.3, 2.9, 5.6, 1.8, Iris-virginica, 0.71
+6.5, 3.0, 5.8, 2.2, Iris-virginica, 0.22
+7.6, 3.0, 6.6, 2.1, Iris-virginica, 1.38
+7.3, 2.9, 6.3, 1.8, Iris-virginica, 0.86
+6.7, 2.5, 5.8, 1.8, Iris-virginica, 0.79
+7.2, 3.6, 6.1, 2.5, Iris-virginica, 0.45
+6.5, 3.2, 5.1, 2.0, Iris-virginica, 0.61
+6.4, 2.7, 5.3, 1.9, Iris-virginica, 0.82
+6.8, 3.0, 5.5, 2.1, Iris-virginica, 0.13
+6.4, 3.2, 5.3, 2.3, Iris-virginica, 0.41
+6.5, 3.0, 5.5, 1.8, Iris-virginica, 0.49
+7.7, 3.8, 6.7, 2.2, Iris-virginica, 2.01
+7.7, 2.6, 6.9, 2.3, Iris-virginica, 2.44
+6.9, 3.2, 5.7, 2.3, Iris-virginica, 0
+7.7, 2.8, 6.7, 2.0, Iris-virginica, 1.89
+6.7, 3.3, 5.7, 2.1, Iris-virginica, 0.09
+7.2, 3.2, 6.0, 1.8, Iris-virginica, 0.43
+6.4, 2.8, 5.6, 2.1, Iris-virginica, 0.46
+7.2, 3.0, 5.8, 1.6, Iris-virginica, 0.63
+7.4, 2.8, 6.1, 1.9, Iris-virginica, 0.73
+7.9, 3.8, 6.4, 2.0, Iris-virginica, 1.94
+6.4, 2.8, 5.6, 2.2, Iris-virginica, 0.43
+7.7, 3.0, 6.1, 2.3, Iris-virginica, 0.84
+6.3, 3.4, 5.6, 2.4, Iris-virginica, 0.42
+6.4, 3.1, 5.5, 1.8, Iris-virginica, 0.55
+6.9, 3.1, 5.4, 2.1, Iris-virginica, 0.14
+6.7, 3.1, 5.6, 2.4, Iris-virginica, 0.07
+6.9, 3.1, 5.1, 2.3, Iris-virginica, 0.37
+6.8, 3.2, 5.9, 2.3, Iris-virginica, 0.05
+6.7, 3.3, 5.7, 2.5, Iris-virginica, 0.09
+6.7, 3.0, 5.2, 2.3, Iris-virginica, 0.33
+6.5, 3.0, 5.2, 2.0, Iris-virginica, 0.54
+6.2, 3.4, 5.4, 2.3, Iris-virginica, 0.62
+----------------------
+cluster 3 : 
+----------------------
+7.0, 3.2, 4.7, 1.4, Iris-versicolor, 1.383533
+6.4, 3.2, 4.5, 1.5, Iris-versicolor, 0.408988
+6.9, 3.1, 4.9, 1.5, Iris-versicolor, 1.248988
+5.5, 2.3, 4.0, 1.3, Iris-versicolor, 0.622624
+6.5, 2.8, 4.6, 1.5, Iris-versicolor, 0.342624
+5.7, 2.8, 4.5, 1.3, Iris-versicolor, 0.084745
+6.3, 3.3, 4.7, 1.6, Iris-versicolor, 0.509594
+4.9, 2.4, 3.3, 1.0, Iris-versicolor, 2.712624
+6.6, 2.9, 4.6, 1.3, Iris-versicolor, 0.500806
+5.2, 2.7, 3.9, 1.4, Iris-versicolor, 0.845957
+5.0, 2.0, 3.5, 1.0, Iris-versicolor, 2.548381
+5.9, 3.0, 4.2, 1.5, Iris-versicolor, 0.118382
+6.0, 2.2, 4.0, 1.0, Iris-versicolor, 0.712321
+6.1, 2.9, 4.7, 1.4, Iris-versicolor, 0.114442
+5.6, 2.9, 3.6, 1.3, Iris-versicolor, 0.861412
+6.7, 3.1, 4.4, 1.4, Iris-versicolor, 0.694139
+5.6, 3.0, 4.5, 1.5, Iris-versicolor, 0.179291
+5.8, 2.7, 4.1, 1.0, Iris-versicolor, 0.338685
+6.2, 2.2, 4.5, 1.5, Iris-versicolor, 0.389593
+5.6, 2.5, 3.9, 1.1, Iris-versicolor, 0.59626
+5.9, 3.2, 4.8, 1.8, Iris-versicolor, 0.448078
+6.1, 2.8, 4.0, 1.3, Iris-versicolor, 0.241412
+6.3, 2.5, 4.9, 1.5, Iris-versicolor, 0.412624
+6.1, 2.8, 4.7, 1.2, Iris-versicolor, 0.155654
+6.4, 2.9, 4.3, 1.3, Iris-versicolor, 0.270806
+6.6, 3.0, 4.4, 1.4, Iris-versicolor, 0.494745
+6.8, 2.8, 4.8, 1.4, Iris-versicolor, 0.871715
+6.0, 2.9, 4.5, 1.5, Iris-versicolor, 0.028988
+5.7, 2.6, 3.5, 1.0, Iris-versicolor, 1.166564
+5.5, 2.4, 3.8, 1.1, Iris-versicolor, 0.854745
+5.5, 2.4, 3.7, 1.0, Iris-versicolor, 1.072018
+5.8, 2.7, 3.9, 1.2, Iris-versicolor, 0.375654
+6.0, 2.7, 5.1, 1.6, Iris-versicolor, 0.467169
+5.4, 3.0, 4.5, 1.5, Iris-versicolor, 0.355654
+6.0, 3.4, 4.5, 1.6, Iris-versicolor, 0.437473
+6.7, 3.1, 4.7, 1.5, Iris-versicolor, 0.761109
+6.3, 2.3, 4.4, 1.3, Iris-versicolor, 0.365654
+5.6, 3.0, 4.1, 1.3, Iris-versicolor, 0.309594
+5.5, 2.5, 4.0, 1.3, Iris-versicolor, 0.477775
+5.5, 2.6, 4.4, 1.2, Iris-versicolor, 0.28323
+6.1, 3.0, 4.6, 1.4, Iris-versicolor, 0.109897
+5.8, 2.6, 4.0, 1.2, Iris-versicolor, 0.3002
+5.0, 2.3, 3.3, 1.0, Iris-versicolor, 2.596866
+5.6, 2.7, 4.2, 1.3, Iris-versicolor, 0.198988
+5.7, 3.0, 4.2, 1.2, Iris-versicolor, 0.232927
+5.7, 2.9, 4.2, 1.3, Iris-versicolor, 0.155957
+6.2, 2.9, 4.3, 1.3, Iris-versicolor, 0.12717
+5.1, 2.5, 3.0, 1.1, Iris-versicolor, 2.968079
+5.7, 2.8, 4.1, 1.3, Iris-versicolor, 0.19626
+5.8, 2.7, 5.1, 1.9, Iris-virginica, 0.665351
+4.9, 2.5, 4.5, 1.7, Iris-virginica, 1.219896
+5.7, 2.5, 5.0, 2.0, Iris-virginica, 0.746866
+5.8, 2.8, 5.1, 2.4, Iris-virginica, 1.365957
+6.0, 2.2, 5.0, 1.5, Iris-virginica, 0.636563
+5.6, 2.8, 4.9, 2.0, Iris-virginica, 0.635654
+6.3, 2.7, 4.9, 1.8, Iris-virginica, 0.469593
+6.2, 2.8, 4.8, 1.8, Iris-virginica, 0.32323
+6.1, 3.0, 4.9, 1.8, Iris-virginica, 0.418684
+6.3, 2.8, 5.1, 1.5, Iris-virginica, 0.569594
+6.1, 2.6, 5.6, 1.4, Iris-virginica, 1.400806
+6.0, 3.0, 4.8, 1.8, Iris-virginica, 0.314745
+5.8, 2.7, 5.1, 1.9, Iris-virginica, 0.665351
+6.3, 2.5, 5.0, 1.9, Iris-virginica, 0.717169
+5.9, 3.0, 5.1, 1.8, Iris-virginica, 0.61929
+----------------------
+(cluster 1 center) (5.006, 3.418, 1.464, 0.244) 
+(cluster 2 center) (6.869444, 3.086111, 5.769444, 2.105556) 
+(cluster 3 center) (5.920313, 2.751563, 4.420313, 1.434375) 
+cluster 1 : 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49
+cluster 2 : 77,100,102,103,104,105,107,108,109,110,111,112,115,116,117,118,120,122,124,125,128,129,130,131,132,135,136,137,139,140,141,143,144,145,147,148
+cluster 3 : 50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,101,106,113,114,119,121,123,126,127,133,134,138,142,146,149
+Cluster 1 match rate: 1.0, not match rate: 0.0 size: 50.0
+Cluster 2 match rate: 0.7, not match rate: 0.027777777777777776 size: 36.0
+Cluster 3 match rate: 0.98, not match rate: 0.234375 size: 64.0

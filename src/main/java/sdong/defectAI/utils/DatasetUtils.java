@@ -2,15 +2,34 @@ package sdong.defectAI.utils;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.javaml.core.Dataset;
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.core.SparseInstance;
+import sdong.defectAI.cluster.Iris_result_verify;
 import sdong.defectAI.exception.DefectAIException;
 import sdong.defectAI.tokenizer.TokenUtils;
 
 public class DatasetUtils {
+	public static List<String> getDatasetCluster(Dataset[] clusters) {
+
+		List<String> clusterlist = new ArrayList<String>();
+		String index = "";
+		for (int i = 0; i < clusters.length; i++) {
+			index = "";
+			for (int j = 0; j < clusters[i].size() - 1; j++) {
+				index = index + clusters[i].get(j).getID() + ",";
+			}
+			index = index + clusters[i].get(clusters[i].size() - 1);
+			clusterlist.add(index);
+		}
+		return clusterlist;
+	}
+
 	public static void exportDataset(Dataset[] clusters, String path) throws DefectAIException {
 
 		try {
@@ -98,5 +117,44 @@ public class DatasetUtils {
 		}
 
 		return out.toString();
+	}
+
+	public static double[][] checkRate(Dataset[] clusters, Dataset data) {
+		double[][] clusterrate = new double[clusters.length][3];
+		Map<String, List<String>> expectlist = new HashMap<String, List<String>>();
+		String key;
+		List<String> clusterlist;
+		for (Instance inst : data) {
+			key = (String) inst.classValue();
+			clusterlist = expectlist.get(key);
+			if (clusterlist == null) {
+				clusterlist = new ArrayList<String>();
+				expectlist.put(key, clusterlist);
+			}
+			clusterlist.add(inst.getID() + "");
+		}
+
+		// rate
+		double[] rate;
+		Iris_result_verify iris = new Iris_result_verify();
+		iris.setResultmap(expectlist);
+		int i = 0;
+		for (Dataset list : clusters) {
+			rate = iris.checkMatchRate(getDatasetIndexList(list));
+			System.out.println(
+					"Cluster " + i + " match rate: " + rate[0] + ", not match rate: " + rate[1] + " size: " + rate[2]);
+			clusterrate[i] = rate;
+			i = i + 1;
+		}
+
+		return clusterrate;
+	}
+
+	public static List<String> getDatasetIndexList(Dataset dataset) {
+		List<String> clusterlist = new ArrayList<String>();
+		for (Instance inst : dataset) {
+			clusterlist.add(inst.getID() + "");
+		}
+		return clusterlist;
 	}
 }

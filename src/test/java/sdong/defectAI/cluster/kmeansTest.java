@@ -18,10 +18,10 @@ public class kmeansTest {
 
 		Kmeans kmeans = new Kmeans(4);
 		kmeans.setKmeansInput(input);
-		assertEquals(150,kmeans.getArraylist().size());
-		assertEquals("Iris-setosa",kmeans.getArraylist().get(0).classify);
-		assertEquals("Iris-versicolor",kmeans.getArraylist().get(50).classify);
-		assertEquals("Iris-virginica",kmeans.getArraylist().get(100).classify);
+		assertEquals(150, kmeans.getArraylist().size());
+		assertEquals("Iris-setosa", kmeans.getArraylist().get(0).classify);
+		assertEquals("Iris-versicolor", kmeans.getArraylist().get(50).classify);
+		assertEquals("Iris-virginica", kmeans.getArraylist().get(100).classify);
 
 	}
 
@@ -63,10 +63,16 @@ public class kmeansTest {
 		String input = "output" + File.separatorChar + "sample-python_matrix_original.txt";
 		String outputFile = "output" + File.separatorChar + "kmeans" + File.separatorChar
 				+ "kmeans_sample-python_matrix_original_result.txt";
+		
+		String valuepath = "output"+ File.separatorChar + "sample-python_token_value.txt";
+		String outputValue = "output" + File.separatorChar + "kmeans" + File.separatorChar
+				+ "kmeans_sample-python_matrix_original_result_value.txt";
+		
 		Kmeans kmeans = new Kmeans(DefectAIConstant.PYTHON_KIND_SIZE);
 		kmeans.setKmeansInput(input, true);
 		kmeans.process();
-		ArrayList<Node> centerlist = kmeans.getCentroidList();
+		
+		kmeans.printKmeansResultsWithValue(outputValue,valuepath);
 		kmeans.printKmeansResults(outputFile);
 	}
 
@@ -75,10 +81,16 @@ public class kmeansTest {
 		String input = "output" + File.separatorChar + "sample-python_matrix_weight.txt";
 		String outputFile = "output" + File.separatorChar + "kmeans" + File.separatorChar
 				+ "kmeans_sample-python_matrix_weight_result.txt";
+		
+		String valuepath = "output"+ File.separatorChar + "sample-python_token_value.txt";
+		String outputValue = "output" + File.separatorChar + "kmeans" + File.separatorChar
+				+ "kmeans_sample-python_matrix_weight_result_value.txt";
+		
 		Kmeans kmeans = new Kmeans(DefectAIConstant.PYTHON_KIND_SIZE);
 		kmeans.setKmeansInput(input, true);
 		kmeans.process();
-		ArrayList<Node> centerlist = kmeans.getCentroidList();
+		
+		kmeans.printKmeansResultsWithValue(outputValue,valuepath);
 		kmeans.printKmeansResults(outputFile);
 	}
 
@@ -87,10 +99,16 @@ public class kmeansTest {
 		String input = "output" + File.separatorChar + "sample-python_matrix_parameterize.txt";
 		String outputFile = "output" + File.separatorChar + "kmeans" + File.separatorChar
 				+ "kmeans_sample-python_matrix_parameterize_result.txt";
+		
+		String valuepath = "output"+ File.separatorChar + "sample-python_parameterize_value.txt";
+		String outputValue = "output" + File.separatorChar + "kmeans" + File.separatorChar
+				+ "kmeans_sample-python_matrix_parameterize_result_value.txt";
+		
 		Kmeans kmeans = new Kmeans(DefectAIConstant.PYTHON_KIND_SIZE);
 		kmeans.setKmeansInput(input, true);
 		kmeans.process();
-		ArrayList<Node> centerlist = kmeans.getCentroidList();
+		
+		kmeans.printKmeansResultsWithValue(outputValue,valuepath);
 		kmeans.printKmeansResults(outputFile);
 	}
 
@@ -99,10 +117,16 @@ public class kmeansTest {
 		String input = "output" + File.separatorChar + "sample-python_matrix_parameter_weight.txt";
 		String outputFile = "output" + File.separatorChar + "kmeans" + File.separatorChar
 				+ "kmeans_sample-python_matrix_parameter_weight_result.txt";
+	
+		String valuepath = "output"+ File.separatorChar + "sample-python_parameterize_value.txt";
+		String outputValue = "output" + File.separatorChar + "kmeans" + File.separatorChar
+				+ "kmeans_sample-python_matrix_parameter_weight_result_value.txt";
+		
 		Kmeans kmeans = new Kmeans(DefectAIConstant.PYTHON_KIND_SIZE);
 		kmeans.setKmeansInput(input, true);
 		kmeans.process();
-		ArrayList<Node> centerlist = kmeans.getCentroidList();
+		
+		kmeans.printKmeansResultsWithValue(outputValue,valuepath);
 		kmeans.printKmeansResults(outputFile);
 	}
 
@@ -113,8 +137,28 @@ public class kmeansTest {
 		Kmeans kmeans = new Kmeans(4);
 		kmeans.setKmeansInput(input, false);
 		kmeans.process();
-		ArrayList<Node> centerlist = kmeans.getCentroidList();
+		
 		kmeans.printKmeansResults(outputFile);
 
 	}
+
+	@Test
+	public void testProcess_iris_weight() {
+		String input = "input" + File.separatorChar + "kmeans" + File.separatorChar + "iris.data";
+		String outputFile = "output" + File.separatorChar + "kmeans" + File.separatorChar + "iris_weight_result.txt";
+		
+		double[] weight = new double[]{0.0423148148148148,
+				0.10208333333333335,
+				0.14717514124293782,
+				0.18444444444444485};
+		
+		Kmeans kmeans = new Kmeans(4);
+		kmeans.setWeight(weight);
+		kmeans.setKmeansInput(input, false);
+		kmeans.process();
+		
+		kmeans.printKmeansResults(outputFile);
+
+	}
+	
 }

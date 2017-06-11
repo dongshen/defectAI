@@ -33,7 +33,8 @@ public class TestKMeans {
 			 */
 			Dataset[] clusters = km.cluster(data);
 			System.out.println("Cluster count: " + clusters.length);
-			DatasetUtils.exportDatasetWithValue(clusters, "input/iris.data", "output/kmeans/javaml_iris_cluster_4k.txt");
+			DatasetUtils.exportDatasetWithValue(clusters, "input/iris.data",
+					"output/kmeans/javaml_iris_cluster_4k.txt");
 
 		} catch (IOException e) {
 			Assert.assertTrue(false);
@@ -64,8 +65,13 @@ public class TestKMeans {
 			 */
 			Dataset[] clusters = km.cluster(data);
 			System.out.println("Cluster count: " + clusters.length);
-			DatasetUtils.exportDatasetWithValue(clusters, "input/iris.data", "output/kmeans/javaml_iris_cluster_3k.txt");
+			
+			DatasetUtils.checkRate(clusters, data);
+			
+			DatasetUtils.exportDatasetWithValue(clusters, "input/iris.data",
+					"output/kmeans/javaml_iris_cluster_3k.txt");
 			DatasetUtils.exportDatasetWithCluster(clusters, "output/kmeans/javaml_iris_cluster_3k_data.txt");
+
 
 		} catch (IOException e) {
 			Assert.assertTrue(false);

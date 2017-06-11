@@ -8,20 +8,15 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.TreeMap;
 
-public class Kmeans {
+public class Kmeansdong {
 
-	public Kmeans(int dimension) {
+	public Kmeansdong(int dimension) {
 		this.dimension = dimension;
-		weight = new double[dimension];
-		for (int i = 0; i < dimension; i++) {
-			weight[i] = 1;
-		}
 	}
 
 	public class Node {
@@ -60,7 +55,6 @@ public class Kmeans {
 	private ArrayList<Node> centroidList;
 	private double averageDis;
 	private int dimension;
-	private double[] weight;
 
 	DecimalFormat df = new DecimalFormat("#.######");// 保留小数点后6位
 
@@ -109,7 +103,7 @@ public class Kmeans {
 					continue;
 				}
 				for (int i = 0; i < dimension; ++i) {
-					node.attributes[i] = Double.parseDouble(strArray[i]) * weight[i];
+					node.attributes[i] = Double.parseDouble(strArray[i]);
 				}
 
 				if (strArray.length > dimension) {
@@ -193,9 +187,16 @@ public class Kmeans {
 		int cnt = 1;
 		int cntEnd = 0;
 		int numLabel = centroid.size();
+		long[] center = new long[centroid.size()];
 		double gap;
 
 		while (true) {// 迭代，直到所有的质心都不变化为止
+			// 根据质心选取距离最近的点为实际质心
+
+			if (getNearestPoint(center) == true) {
+				break;
+			}
+
 			boolean flag = false;
 			// 依据与质心的最小距离，标识每个点
 			for (int i = 0; i < arraylist.size(); ++i) {
@@ -246,9 +247,40 @@ public class Kmeans {
 			}
 			if (cntEnd == numLabel) {// 若所有的质心都不变，则 success
 				System.out.println("run kmeans successfully.");
-				break;
+				// break;
 			}
 		}
+	}
+
+	public boolean getNearestPoint(long[] center) {
+		Node nearestNode = new Node();
+		double distance;
+		double mindistance = 0x7fffffff;
+		boolean update = false;
+		boolean stable = true;
+		for (int i = 0; i < centroidList.size(); i++) {
+			update = false;
+			mindistance = 0x7fffffff;
+			for (Node node : arraylist) {
+				distance = getDistance(centroidList.get(i), node);
+				if (mindistance > distance) {
+					mindistance = distance;
+					nearestNode = node;
+					update = true;
+				}
+			}
+			if (update == true) {
+				if (nearestNode.seq != center[i]) {
+					center[i] = nearestNode.seq;
+					stable = false;
+					for (int j = 0; j < nearestNode.attributes.length; j++) {
+						centroidList.get(i).attributes[j] = nearestNode.attributes[j];
+					}
+				}
+			}
+
+		}
+		return stable;
 	}
 
 	public void process() {
@@ -270,42 +302,6 @@ public class Kmeans {
 		}
 
 		return map;
-	}
-
-	public void printKmeansResultsWithValue(String outpath, String valuepath) {
-		List<String> valuelist = new ArrayList<String>();
-		try {
-			// get value list;
-			BufferedReader br = new BufferedReader(new FileReader(valuepath));
-			String str;
-			while ((str = br.readLine()) != null) {
-				valuelist.add(str);
-			}
-			br.close();
-
-			PrintStream out = new PrintStream(outpath);
-			out.println("There are " + centroidList.size() + " clusters!");
-			// print cluster detail
-			Map<Integer, String> map = this.getClusterList();
-			String clusterlist;
-			int ind;
-			String strline;
-			for (Integer key : map.keySet()) {
-				out.println("cluster " + key + " : ");
-				out.println("----------------------");
-				clusterlist = map.get(key);
-				for (String index : clusterlist.split(",")) {
-					ind = Integer.parseInt(index.trim());
-					out.println(index + ", " + valuelist.get(ind));
-				}
-				out.println("----------------------");
-			}
-
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
 	}
 
 	public void printKmeansResults(String path) {
@@ -354,7 +350,6 @@ public class Kmeans {
 				out.println("cluster " + key + " : " + map.get(key));
 			}
 
-			// rate
 			Iris_result_verify iris = new Iris_result_verify();
 			for (Integer key : map.keySet()) {
 				double[] rate = iris.checkMatchRate(Arrays.asList(map.get(key).split(",")));
@@ -381,14 +376,6 @@ public class Kmeans {
 
 	public double getAverageDis() {
 		return averageDis;
-	}
-
-	public double[] getWeight() {
-		return weight;
-	}
-
-	public void setWeight(double[] weight) {
-		this.weight = weight;
 	}
 
 }
