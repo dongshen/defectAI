@@ -174,7 +174,7 @@ public class TokenUtils {
 	public static List<String> getTokensValue(List<TokenEntry> entrys) {
 		List<String> valuelist = new ArrayList<String>();
 		for (TokenEntry entry : entrys) {
-			valuelist.add(entry.toString());
+			valuelist.add(entry.toString().replaceAll("\r|\n", ""));
 		}
 		return valuelist;
 	}

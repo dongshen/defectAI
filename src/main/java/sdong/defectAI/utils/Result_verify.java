@@ -1,4 +1,4 @@
-package sdong.defectAI.cluster;
+package sdong.defectAI.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
 
-public class Iris_result_verify {
+public class Result_verify {
 
 	public Map<String, List<String>> resultmap = new HashMap<String, List<String>>() {
 		/**
@@ -32,16 +32,19 @@ public class Iris_result_verify {
 		}
 	};
 
-	public double[] checkMatchRate(List<String> result) {
-		double[] maxRate = new double[3];
+	public String[] checkMatchRate(List<String> result) {
+		String[] maxRate = new String[4];
 		double curRate = 0;
+		double maxvalue = 0;
 		for (Map.Entry<String, List<String>> entry : resultmap.entrySet()) {
 			List<String> intersectionlist = getIntersectionOfList(entry.getValue(), result);
 			curRate = (double) intersectionlist.size() / entry.getValue().size();
-			if (curRate > maxRate[0]) {
-				maxRate[0] = curRate;
-				maxRate[1] = (double)(result.size()-intersectionlist.size())/result.size();
-				maxRate[2] = result.size();
+			if (curRate > maxvalue) {
+				maxvalue = curRate;
+				maxRate[0] = entry.getKey();
+				maxRate[1] = String.valueOf(curRate);
+				maxRate[2] = String.valueOf((double) (result.size() - intersectionlist.size()) / result.size());
+				maxRate[3] = String.valueOf(result.size());
 			}
 		}
 
@@ -60,6 +63,4 @@ public class Iris_result_verify {
 		this.resultmap = resultmap;
 	}
 
-	
-	
 }

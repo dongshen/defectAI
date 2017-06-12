@@ -264,16 +264,16 @@ cluster 10 : 15,16,22,23,24,25,26,35,41,43,46,48,50,52,54,55,57,60,61,65,66,68,6
 cluster 11 : 21,27,56,63,71,178,195
 cluster 12 : 34,58,78,90,99,113,165,197
 cluster 13 : 1,2,3
-Cluster 1 match rate: 0.24, not match rate: 0.0 size: 12.0
-Cluster 2 match rate: 0.08, not match rate: 0.6 size: 10.0
-Cluster 3 match rate: 0.06, not match rate: 0.4 size: 5.0
-Cluster 4 match rate: 0.04, not match rate: 0.3333333333333333 size: 3.0
-Cluster 5 match rate: 0.36, not match rate: 0.625 size: 48.0
-Cluster 6 match rate: 0.04, not match rate: 0.3333333333333333 size: 3.0
-Cluster 7 match rate: 0.06, not match rate: 0.5 size: 6.0
-Cluster 8 match rate: 0.04, not match rate: 0.7142857142857143 size: 7.0
-Cluster 9 match rate: 0.16, not match rate: 0.68 size: 25.0
-Cluster 10 match rate: 0.48, not match rate: 0.6190476190476191 size: 63.0
-Cluster 11 match rate: 0.06, not match rate: 0.5714285714285714 size: 7.0
-Cluster 12 match rate: 0.08, not match rate: 0.5 size: 8.0
-Cluster 13 match rate: 0.06, not match rate: 0.0 size: 3.0
+Cluster 1 match from rate: 1.0, not match rate: 0.0 size: 12
+Cluster 2 match except rate: 1.0, not match rate: 0.0 size: 10
+Cluster 3 match try rate: 1.0, not match rate: 0.0 size: 5
+Cluster 4 match null rate: null, not match rate: null size: null
+Cluster 5 match null rate: null, not match rate: null size: null
+Cluster 6 match null rate: null, not match rate: null size: null
+Cluster 7 match null rate: null, not match rate: null size: null
+Cluster 8 match null rate: null, not match rate: null size: null
+Cluster 9 match if rate: 1.0, not match rate: 0.0 size: 25
+Cluster 10 match null rate: null, not match rate: null size: null
+Cluster 11 match null rate: null, not match rate: null size: null
+Cluster 12 match null rate: null, not match rate: null size: null
+Cluster 13 match import rate: 1.0, not match rate: 0.0 size: 3

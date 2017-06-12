@@ -14,6 +14,8 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.TreeMap;
 
+import sdong.defectAI.utils.Result_verify;
+
 public class Kmeans {
 
 	public Kmeans(int dimension) {
@@ -289,7 +291,6 @@ public class Kmeans {
 			Map<Integer, String> map = this.getClusterList();
 			String clusterlist;
 			int ind;
-			String strline;
 			for (Integer key : map.keySet()) {
 				out.println("cluster " + key + " : ");
 				out.println("----------------------");
@@ -309,6 +310,10 @@ public class Kmeans {
 	}
 
 	public void printKmeansResults(String path) {
+		printKmeansResults(path, null);
+	}
+
+	public void printKmeansResults(String path, Map<String, List<String>> resultmap) {
 		try {
 			PrintStream out = new PrintStream(path);
 			out.println("There are " + centroidList.size() + " clusters!");
@@ -330,15 +335,7 @@ public class Kmeans {
 				}
 				out.println("----------------------");
 			}
-			/*
-			 * for (int i = 0; i < arraylist.size(); ++i) { out.print("(" +
-			 * arraylist.get(i).seq + ") "); out.print("( " +
-			 * arraylist.get(i).label + " ) ("); for (int j = 0; j < dimension;
-			 * ++j) { out.print(arraylist.get(i).attributes[j] + ", "); }
-			 * out.println(arraylist.get(i).classify + ") ");
-			 * 
-			 * }
-			 */
+
 			// print center
 			for (int i = 0; i < centroidList.size(); ++i) {
 				out.print("(cluster " + (i + 1) + " center) (");
@@ -355,11 +352,14 @@ public class Kmeans {
 			}
 
 			// rate
-			Iris_result_verify iris = new Iris_result_verify();
+			Result_verify iris = new Result_verify();
+			if (resultmap != null) {
+				iris.setResultmap(resultmap);
+			}
 			for (Integer key : map.keySet()) {
-				double[] rate = iris.checkMatchRate(Arrays.asList(map.get(key).split(",")));
-				strline = "Cluster " + key + " match rate: " + rate[0] + ", not match rate: " + rate[1] + " size: "
-						+ rate[2];
+				String[] rate = iris.checkMatchRate(Arrays.asList(map.get(key).split(",")));
+				strline = "Cluster " + key + " match " + rate[0] + " rate: " + rate[1] + ", not match rate: " + rate[2]
+						+ " size: " + rate[3];
 				out.println(strline);
 				System.out.println(strline);
 			}

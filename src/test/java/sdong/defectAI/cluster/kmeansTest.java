@@ -4,6 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -55,7 +59,18 @@ public class kmeansTest {
 			}
 			System.out.println();
 		}
-		kmeans.printKmeansResults(outputFile);
+
+		// verify data;
+		Map<String, List<String>> resultmap = new HashMap<String, List<String>>() {
+			{
+				put("1", Arrays.asList("0,1,2,3".split(",")));
+				put("2", Arrays.asList("4,5,6,7".split(",")));
+				put("3", Arrays.asList("12,13,14,15".split(",")));
+				put("4", Arrays.asList("8,9,10,11".split(",")));
+			}
+		};
+
+		kmeans.printKmeansResults(outputFile, resultmap);
 	}
 
 	@Test
@@ -63,17 +78,19 @@ public class kmeansTest {
 		String input = "output" + File.separatorChar + "sample-python_matrix_original.txt";
 		String outputFile = "output" + File.separatorChar + "kmeans" + File.separatorChar
 				+ "kmeans_sample-python_matrix_original_result.txt";
-		
-		String valuepath = "output"+ File.separatorChar + "sample-python_token_value.txt";
+
+		String valuepath = "output" + File.separatorChar + "sample-python_token_value.txt";
 		String outputValue = "output" + File.separatorChar + "kmeans" + File.separatorChar
 				+ "kmeans_sample-python_matrix_original_result_value.txt";
-		
+
 		Kmeans kmeans = new Kmeans(DefectAIConstant.PYTHON_KIND_SIZE);
 		kmeans.setKmeansInput(input, true);
 		kmeans.process();
-		
-		kmeans.printKmeansResultsWithValue(outputValue,valuepath);
-		kmeans.printKmeansResults(outputFile);
+
+		kmeans.printKmeansResultsWithValue(outputValue, valuepath);
+		// verify data;
+
+		kmeans.printKmeansResults(outputFile, getVerifyData());
 	}
 
 	@Test
@@ -81,17 +98,17 @@ public class kmeansTest {
 		String input = "output" + File.separatorChar + "sample-python_matrix_weight.txt";
 		String outputFile = "output" + File.separatorChar + "kmeans" + File.separatorChar
 				+ "kmeans_sample-python_matrix_weight_result.txt";
-		
-		String valuepath = "output"+ File.separatorChar + "sample-python_token_value.txt";
+
+		String valuepath = "output" + File.separatorChar + "sample-python_token_value.txt";
 		String outputValue = "output" + File.separatorChar + "kmeans" + File.separatorChar
 				+ "kmeans_sample-python_matrix_weight_result_value.txt";
-		
+
 		Kmeans kmeans = new Kmeans(DefectAIConstant.PYTHON_KIND_SIZE);
 		kmeans.setKmeansInput(input, true);
 		kmeans.process();
-		
-		kmeans.printKmeansResultsWithValue(outputValue,valuepath);
-		kmeans.printKmeansResults(outputFile);
+
+		kmeans.printKmeansResultsWithValue(outputValue, valuepath);
+		kmeans.printKmeansResults(outputFile, getVerifyData());
 	}
 
 	@Test
@@ -99,17 +116,17 @@ public class kmeansTest {
 		String input = "output" + File.separatorChar + "sample-python_matrix_parameterize.txt";
 		String outputFile = "output" + File.separatorChar + "kmeans" + File.separatorChar
 				+ "kmeans_sample-python_matrix_parameterize_result.txt";
-		
-		String valuepath = "output"+ File.separatorChar + "sample-python_parameterize_value.txt";
+
+		String valuepath = "output" + File.separatorChar + "sample-python_parameterize_value.txt";
 		String outputValue = "output" + File.separatorChar + "kmeans" + File.separatorChar
 				+ "kmeans_sample-python_matrix_parameterize_result_value.txt";
-		
+
 		Kmeans kmeans = new Kmeans(DefectAIConstant.PYTHON_KIND_SIZE);
 		kmeans.setKmeansInput(input, true);
 		kmeans.process();
-		
-		kmeans.printKmeansResultsWithValue(outputValue,valuepath);
-		kmeans.printKmeansResults(outputFile);
+
+		kmeans.printKmeansResultsWithValue(outputValue, valuepath);
+		kmeans.printKmeansResults(outputFile, getVerifyData());
 	}
 
 	@Test
@@ -117,17 +134,17 @@ public class kmeansTest {
 		String input = "output" + File.separatorChar + "sample-python_matrix_parameter_weight.txt";
 		String outputFile = "output" + File.separatorChar + "kmeans" + File.separatorChar
 				+ "kmeans_sample-python_matrix_parameter_weight_result.txt";
-	
-		String valuepath = "output"+ File.separatorChar + "sample-python_parameterize_value.txt";
+
+		String valuepath = "output" + File.separatorChar + "sample-python_parameterize_value.txt";
 		String outputValue = "output" + File.separatorChar + "kmeans" + File.separatorChar
 				+ "kmeans_sample-python_matrix_parameter_weight_result_value.txt";
-		
+
 		Kmeans kmeans = new Kmeans(DefectAIConstant.PYTHON_KIND_SIZE);
 		kmeans.setKmeansInput(input, true);
 		kmeans.process();
-		
-		kmeans.printKmeansResultsWithValue(outputValue,valuepath);
-		kmeans.printKmeansResults(outputFile);
+
+		kmeans.printKmeansResultsWithValue(outputValue, valuepath);
+		kmeans.printKmeansResults(outputFile, getVerifyData());
 	}
 
 	@Test
@@ -137,7 +154,7 @@ public class kmeansTest {
 		Kmeans kmeans = new Kmeans(4);
 		kmeans.setKmeansInput(input, false);
 		kmeans.process();
-		
+
 		kmeans.printKmeansResults(outputFile);
 
 	}
@@ -146,19 +163,33 @@ public class kmeansTest {
 	public void testProcess_iris_weight() {
 		String input = "input" + File.separatorChar + "kmeans" + File.separatorChar + "iris.data";
 		String outputFile = "output" + File.separatorChar + "kmeans" + File.separatorChar + "iris_weight_result.txt";
-		
-		double[] weight = new double[]{0.0423148148148148,
-				0.10208333333333335,
-				0.14717514124293782,
-				0.18444444444444485};
-		
+
+		double[] weight = new double[] { 0.0423148148148148, 0.10208333333333335, 0.14717514124293782,
+				0.18444444444444485 };
+
 		Kmeans kmeans = new Kmeans(4);
 		kmeans.setWeight(weight);
 		kmeans.setKmeansInput(input, false);
 		kmeans.process();
-		
+
 		kmeans.printKmeansResults(outputFile);
 
 	}
-	
+
+	private Map<String, List<String>> getVerifyData() {
+
+		Map<String, List<String>> resultmap = new HashMap<String, List<String>>() {
+			{
+				put("try", Arrays.asList("36,64,76,96,164".split(",")));
+				put("except", Arrays.asList("38,67,98,121,131,139,147,159,161,173".split(",")));
+				put("if",
+						Arrays.asList(
+								"39,40,45,47,49,51,53,59,80,82,83,92,94,101,103,105,106,112,115,127,156,167,180,189,191"
+										.split(",")));
+				put("import", Arrays.asList("1,2,3".split(",")));
+				put("from", Arrays.asList("0,4,5,6,7,8,9,10,11,12,13,14".split(",")));
+			}
+		};
+		return resultmap;
+	}
 }

@@ -26,11 +26,7 @@
 25=self,.,_response_middleware,=,None
 26=self,.,_exception_middleware,=,None
 27=def,load_middleware,(,self,),:
-28="""
-        Populate middleware lists from settings.MIDDLEWARE_CLASSES.
-
-        Must be called after the environment is fixed (see __call__ in subclasses).
-        """
+28="""        Populate middleware lists from settings.MIDDLEWARE_CLASSES.        Must be called after the environment is fixed (see __call__ in subclasses).        """
 29=self,.,_view_middleware,=,[,]
 30=self,.,_template_response_middleware,=,[,]
 31=self,.,_response_middleware,=,[,]
@@ -181,15 +177,7 @@
 176=response,.,_closable_objects,.,append,(,request,)
 177=return,response
 178=def,handle_uncaught_exception,(,self,,,request,,,resolver,,,exc_info,),:
-179="""
-        Processing for any otherwise uncaught exceptions (those that will
-        generate HTTP 500 responses). Can be overridden by subclasses who want
-        customised 500 handling.
-
-        Be *very* careful when overriding this because the error could be
-        caused by anything, so assuming something like the database is always
-        available would be an error.
-        """
+179="""        Processing for any otherwise uncaught exceptions (those that will        generate HTTP 500 responses). Can be overridden by subclasses who want        customised 500 handling.        Be *very* careful when overriding this because the error could be        caused by anything, so assuming something like the database is always        available would be an error.        """
 180=if,settings,.,DEBUG_PROPAGATE_EXCEPTIONS,:
 181=raise
 182=logger,.,error,(,'Internal Server Error: %s',,,request,.,path,,
@@ -206,11 +194,7 @@
 193=callback,,,param_dict,=,resolver,.,resolve_error_handler,(,500,)
 194=return,callback,(,request,,,**,param_dict,)
 195=def,apply_response_fixes,(,self,,,request,,,response,),:
-196="""
-        Applies each of the functions in self.response_fixes to the request and
-        response, modifying the response in the process. Returns the new
-        response.
-        """
+196="""        Applies each of the functions in self.response_fixes to the request and        response, modifying the response in the process. Returns the new        response.        """
 197=for,func,in,self,.,response_fixes,:
 198=response,=,func,(,request,,,response,)
 199=return,response

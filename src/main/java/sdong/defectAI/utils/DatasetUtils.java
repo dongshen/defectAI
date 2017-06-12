@@ -10,7 +10,6 @@ import java.util.Map;
 import net.sf.javaml.core.Dataset;
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.core.SparseInstance;
-import sdong.defectAI.cluster.Iris_result_verify;
 import sdong.defectAI.exception.DefectAIException;
 import sdong.defectAI.tokenizer.TokenUtils;
 
@@ -119,8 +118,8 @@ public class DatasetUtils {
 		return out.toString();
 	}
 
-	public static double[][] checkRate(Dataset[] clusters, Dataset data) {
-		double[][] clusterrate = new double[clusters.length][3];
+	public static String[][] checkRate(Dataset[] clusters, Dataset data) {
+		String[][] clusterrate = new String[clusters.length][4];
 		Map<String, List<String>> expectlist = new HashMap<String, List<String>>();
 		String key;
 		List<String> clusterlist;
@@ -135,14 +134,14 @@ public class DatasetUtils {
 		}
 
 		// rate
-		double[] rate;
-		Iris_result_verify iris = new Iris_result_verify();
+		String[] rate;
+		Result_verify iris = new Result_verify();
 		iris.setResultmap(expectlist);
 		int i = 0;
 		for (Dataset list : clusters) {
 			rate = iris.checkMatchRate(getDatasetIndexList(list));
-			System.out.println(
-					"Cluster " + i + " match rate: " + rate[0] + ", not match rate: " + rate[1] + " size: " + rate[2]);
+			System.out.println("Cluster " + i + " match " + rate[0] + " rate: " + rate[1] + ", not match rate: "
+					+ rate[2] + " size: " + rate[3]);
 			clusterrate[i] = rate;
 			i = i + 1;
 		}
