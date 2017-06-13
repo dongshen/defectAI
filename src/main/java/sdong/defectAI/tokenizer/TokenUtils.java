@@ -12,7 +12,6 @@ import java.util.TreeMap;
 
 import net.sourceforge.pmd.cpd.TokenEntry;
 import net.sourceforge.pmd.cpd.Tokens;
-import sdong.defectAI.cluster.Kmeans.Node;
 
 public class TokenUtils {
 	public static void printTokensInfo(Tokens tokens) {
@@ -174,7 +173,9 @@ public class TokenUtils {
 	public static List<String> getTokensValue(List<TokenEntry> entrys) {
 		List<String> valuelist = new ArrayList<String>();
 		for (TokenEntry entry : entrys) {
-			valuelist.add(entry.toString().replaceAll("\r|\n", ""));
+			if (entry.getKind() != 0) {
+				valuelist.add(entry.toString().replaceAll("\r|\n", ""));
+			}
 		}
 		return valuelist;
 	}
@@ -239,10 +240,8 @@ public class TokenUtils {
 	 */
 	public static void saveTokensValue(List<Tokens> tokenslist, String fileName) throws FileNotFoundException {
 		PrintStream out = new PrintStream(fileName);
-		int line = 0;
 		for (Tokens tokens : tokenslist) {
-			out.println(line + "=" + String.join(",", getTokensValue(tokens)));
-			line = line + 1;
+			out.println(String.join(",", getTokensValue(tokens)));
 		}
 		out.close();
 	}
