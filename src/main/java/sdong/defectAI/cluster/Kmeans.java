@@ -8,6 +8,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -60,6 +61,7 @@ public class Kmeans {
 
 	private ArrayList<Node> arraylist;
 	private ArrayList<Node> centroidList;
+	private Map<String, List<String>> expectlist;
 	private double averageDis;
 	private int dimension;
 	private double[] weight;
@@ -95,6 +97,7 @@ public class Kmeans {
 			String[] strArray;
 			arraylist = new ArrayList<Node>();
 			long seq = 0;
+			List<String> expect;
 			if (includeHeader == true) {
 				seq = -1;
 			}
@@ -106,7 +109,7 @@ public class Kmeans {
 				strArray = str.split(",");
 				Node node = new Node();
 				node.setSeq(seq);
-				seq = seq + 1;
+
 				if (strArray.length < dimension) {
 					continue;
 				}
@@ -116,9 +119,18 @@ public class Kmeans {
 
 				if (strArray.length > dimension) {
 					node.classify = strArray[strArray.length - 1];
+					if (expectlist == null) {
+						expectlist = new HashMap<String, List<String>>();
+					}
+					expect = expectlist.get(node.classify);
+					if (expect == null) {
+						expect = new ArrayList<String>();
+						expectlist.put(node.classify, expect);
+					}
+					expect.add(seq + "");
 				}
 				arraylist.add(node);
-
+				seq = seq + 1;
 			}
 			br.close();
 		} catch (IOException e) {
@@ -352,16 +364,20 @@ public class Kmeans {
 			}
 
 			// rate
-			Result_verify iris = new Result_verify();
-			if (resultmap != null) {
-				iris.setResultmap(resultmap);
-			}
-			for (Integer key : map.keySet()) {
-				String[] rate = iris.checkMatchRate(Arrays.asList(map.get(key).split(",")));
-				strline = "Cluster " + key + " match " + rate[0] + " rate: " + rate[1] + ", not match rate: " + rate[2]
-						+ " size: " + rate[3];
-				out.println(strline);
-				System.out.println(strline);
+			if (expectlist != null || resultmap != null) {
+				Result_verify iris = new Result_verify();
+				if (resultmap != null) {
+					iris.setResultmap(resultmap);
+				} else {
+					iris.setResultmap(expectlist);
+				}
+				for (Integer key : map.keySet()) {
+					String[] rate = iris.checkMatchRate(Arrays.asList(map.get(key).split(",")));
+					strline = "Cluster " + key + " match " + rate[0] + " rate: " + rate[1] + ", not match rate: "
+							+ rate[2] + " size: " + rate[3];
+					out.println(strline);
+					System.out.println(strline);
+				}
 			}
 
 			out.close();

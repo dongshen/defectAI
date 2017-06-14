@@ -9,16 +9,16 @@ import net.sourceforge.pmd.PMD;
 import net.sourceforge.pmd.cpd.PythonTokenizer;
 import net.sourceforge.pmd.cpd.SourceCode;
 import net.sourceforge.pmd.cpd.Tokens;
+import net.sourceforge.pmd.lang.python.ast.PythonParserConstants;
 
 public class TokenizerPython extends AbstractTokenizer {
 
-	public final int maxKindSize = 200;
-	
+	public static final int maxKindSize = PythonParserConstants.DEFINE_FUNCTION + 1;
+
 	public TokenizerPython() {
 		this.tokenizer = new PythonTokenizer();
-		maxTokenKindSize = this.maxKindSize;
+		maxTokenKindSize = maxKindSize;
 	}
-	
 
 	@Override
 	public Tokens buildTokenizer(String fileName) throws IOException {

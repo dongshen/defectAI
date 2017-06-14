@@ -9,6 +9,7 @@ import sdong.defectAI.tokenizer.AbstractTokenizer;
 import sdong.defectAI.tokenizer.TokenUtils;
 import sdong.defectAI.tokenizer.TokenWeight;
 import sdong.defectAI.tokenizer.TokenizerPython;
+import sdong.defectAI.utils.MatrixUtil;
 
 public class PreProcess {
 
@@ -51,20 +52,12 @@ public class PreProcess {
 	}
 
 	public double[] converTokensToMatrix(Tokens tokens) {
-
-		double[] matrix = new double[tokenizer.getMaxTokenKindSize()];
-
 		// parameterize
 		if (needparameterize == true) {
 			tokens = paramaterize.parameterizeTokens(tokens);
 		}
 
-		List<Integer> kinds = TokenUtils.getTokensKind(tokens);
-		for (Integer kind : kinds) {
-			if (kind != 0) {
-				matrix[kind] = matrix[kind] + 1;
-			}
-		}
+		double[] matrix = MatrixUtil.convertKindToMatrix(TokenUtils.getTokensKind(tokens));
 
 		if (needWeight == true) {
 			for (int i = 0; i < tokenizer.getMaxTokenKindSize(); i++) {

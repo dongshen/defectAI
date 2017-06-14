@@ -13,6 +13,7 @@ import java.util.List;
 import org.junit.Test;
 
 import net.sourceforge.pmd.cpd.Tokens;
+import sdong.defectAI.exception.DefectAIException;
 import sdong.defectAI.tokenizer.TokenUtils;
 import sdong.defectAI.tokenizer.TokenizerPython;
 import sdong.defectAI.utils.MatrixUtil;
@@ -96,6 +97,9 @@ public class PreProcessTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DefectAIException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

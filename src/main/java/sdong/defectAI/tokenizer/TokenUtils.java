@@ -140,6 +140,28 @@ public class TokenUtils {
 		return kinds;
 	}
 
+	public static List<List<Integer>> getTokensKindFromFile(String path) throws FileNotFoundException {
+		List<List<Integer>> kindlist = new ArrayList<List<Integer>>();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(path));
+			String str;
+			List<Integer> kinds;
+			String[] kindstr;
+			while ((str = br.readLine()) != null) {
+				kinds = new ArrayList<Integer>();
+				kindstr = str.split(",");
+				for(String kind :kindstr){
+					kinds.add(Integer.parseInt(kind.trim()));
+				}
+				kindlist.add(kinds);
+			}
+			br.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return kindlist;
+	}
+
 	public static Map<Integer, List<TokenEntry>> getTokensEntryByLine(Tokens tokens) {
 		Map<Integer, List<TokenEntry>> entrylist = new TreeMap<Integer, List<TokenEntry>>();
 		List<TokenEntry> lineEntry;
@@ -219,10 +241,8 @@ public class TokenUtils {
 	 */
 	public static void saveTokensKind(List<Tokens> tokenslist, String fileName) throws FileNotFoundException {
 		PrintStream out = new PrintStream(fileName);
-		int line = 0;
 		for (Tokens tokens : tokenslist) {
-			out.println(line + "=" + String.join(",", getTokensKindAsStr(tokens)));
-			line = line + 1;
+			out.println(String.join(",", getTokensKindAsStr(tokens)));
 		}
 		out.close();
 	}

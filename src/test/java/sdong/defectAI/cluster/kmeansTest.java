@@ -60,17 +60,7 @@ public class kmeansTest {
 			System.out.println();
 		}
 
-		// verify data;
-		Map<String, List<String>> resultmap = new HashMap<String, List<String>>() {
-			{
-				put("1", Arrays.asList("0,1,2,3".split(",")));
-				put("2", Arrays.asList("4,5,6,7".split(",")));
-				put("3", Arrays.asList("12,13,14,15".split(",")));
-				put("4", Arrays.asList("8,9,10,11".split(",")));
-			}
-		};
-
-		kmeans.printKmeansResults(outputFile, resultmap);
+		kmeans.printKmeansResults(outputFile);
 	}
 
 	@Test

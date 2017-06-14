@@ -44,8 +44,8 @@ public class Result_verify {
 				maxRate[0] = entry.getKey();
 				maxRate[1] = String.valueOf(curRate);
 				maxRate[2] = String.valueOf((double) (result.size() - intersectionlist.size()) / result.size());
-				maxRate[3] = String.valueOf(result.size());
 			}
+			maxRate[3] = String.valueOf(result.size());
 		}
 
 		return maxRate;
