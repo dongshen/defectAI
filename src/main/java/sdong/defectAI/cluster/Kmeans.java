@@ -145,6 +145,8 @@ public class Kmeans {
 				NodeComparator nodecomp = new NodeComparator();
 				nodecomp.nodeOne = new Node();
 				nodecomp.nodeTwo = new Node();
+				nodecomp.nodeOne.seq = i;
+				nodecomp.nodeTwo.seq = j;
 				for (int k = 0; k < dimension; ++k) {
 					nodecomp.nodeOne.attributes[k] = arraylist.get(i).attributes[k];
 					nodecomp.nodeTwo.attributes[k] = arraylist.get(j).attributes[k];
@@ -175,6 +177,7 @@ public class Kmeans {
 			boolean judgeTwo = false;
 			// FsQueue 已经按距离的由大到小排序，第一个点就是距离最大的两点
 			NodeComparator nc = FsQueue.poll();
+			System.out.println(nc.nodeOne.seq + "," + nc.nodeTwo.seq);
 			if (nc.distance < averageDis)
 				break;// 如果接下来的元组，两节点间距离小于平均距离，则不继续迭代
 			if (!flag) {

@@ -14,7 +14,7 @@ import org.junit.Test;
 import sdong.defectAI.cluster.Kmeans.Node;
 import sdong.defectAI.constant.DefectAIConstant;
 
-public class kmeansTest {
+public class KmeansTest {
 
 	@Test
 	public void testSetKmeansInput_with_class() {
@@ -181,5 +181,19 @@ public class kmeansTest {
 			}
 		};
 		return resultmap;
+	}
+	
+	@Test
+	public void testComputeTheK() {
+		String input = "input" + File.separatorChar + "kmeans" + File.separatorChar + "iris.data";
+		Kmeans kmeans = new Kmeans(4);
+		kmeans.setKmeansInput(input, false);
+		kmeans.computeTheK();
+		List<Node> centers = kmeans.getCentroidList();
+		
+		assertEquals(3, centers.size());
+		assertEquals(13, centers.get(0).seq);
+		assertEquals(118, centers.get(1).seq);
+		assertEquals(87, centers.get(2).seq);
 	}
 }
