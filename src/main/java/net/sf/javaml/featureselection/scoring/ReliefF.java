@@ -3,7 +3,6 @@
  */
 package net.sf.javaml.featureselection.scoring;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -14,9 +13,6 @@ import net.sf.javaml.core.Instance;
 import net.sf.javaml.distance.ManhattanDistance;
 import net.sf.javaml.featureselection.FeatureScoring;
 import net.sf.javaml.filter.normalize.NormalizeMidrange;
-import net.sf.javaml.tools.DatasetTools;
-import sdong.defectAI.cluster.Kmeans.Node;
-import sdong.defectAI.cluster.Kmeans.NodeComparator;
 
 /**
  * Implementation of the RELIEF attribute evaluation algorithm.
@@ -67,14 +63,22 @@ public class ReliefF implements FeatureScoring {
 			Instance random = data.instance(rg.nextInt(data.size()));
 			findNearest(data, random);
 			for (int j = 0; j < weights.length; j++)
-				weights[j] = weights[j] - diff(j, random, nearestHit) / m + diff(j, random, nearestMiss) / m;
+				weights[j] = weights[j] - diff(j, random, nearestHit) / m + diff(j, random, nearestMissList) / m;
 
 		}
 	}
 
 	private Vector<Instance> nearestHit;
 
-	private Vector<Instance> nearestMiss;
+	private Map<String, Vector<Instance>> nearestMissList;
+
+	private double diff(int index, Instance a, Map<String, Vector<Instance>> map) {
+		double sum = 0;
+		for (Map.Entry<String, Vector<Instance>> entry : map.entrySet()) {
+			sum += diff(index, a, entry.getValue());
+		}
+		return sum / map.size();
+	}
 
 	private double diff(int index, Instance a, Vector<Instance> vector) {
 		double sum = 0;
@@ -96,18 +100,24 @@ public class ReliefF implements FeatureScoring {
 	 */
 	private void findNearest(Dataset data, Instance random) {
 
-		nearestMiss = new Vector<Instance>();
+		nearestMissList = new HashMap<String, Vector<Instance>>();
 		nearestHit = new Vector<Instance>();
 		for (Instance i : data) {
 			if (!i.equals(random)) {
+				String key = (String) i.classValue();
 				if (i.classValue().equals(random.classValue())) {
 					nearestHit.add(i);
 					if (nearestHit.size() > numNeighbors)
 						removeFarthest(nearestHit, random);
 				} else {
+					Vector<Instance> nearestMiss = nearestMissList.get(i.classValue());
+					if (nearestMiss == null) {
+						nearestMiss = new Vector<Instance>();
+					}
 					nearestMiss.add(i);
-					if (nearestMiss.size() > numNeighbors)
+					if (nearestMissList.size() > numNeighbors)
 						removeFarthest(nearestMiss, random);
+					nearestMissList.put(key, nearestMiss);
 				}
 
 			}
@@ -163,7 +173,5 @@ public class ReliefF implements FeatureScoring {
 	public void setDist(ManhattanDistance dist) {
 		this.dist = dist;
 	}
-
-	
 
 }

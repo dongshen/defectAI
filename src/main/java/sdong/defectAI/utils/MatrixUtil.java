@@ -34,7 +34,26 @@ public class MatrixUtil {
 		}
 	}
 
-	public static double[] convertKindToMatrix(List<Integer> kindlist)  {
+	public static void printMatrix(double[] matrix, String path) throws DefectAIException {
+		int dimX = matrix.length;
+		PrintStream out;
+		try {
+			out = new PrintStream(path);
+
+			for (int j = 0; j < dimX - 1; j++) {
+				out.print(matrix[j] + ",");
+			}
+			out.println(matrix[dimX - 1]);
+
+			out.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new DefectAIException(e);
+		}
+	}
+
+	public static double[] convertKindToMatrix(List<Integer> kindlist) {
 
 		double[] matrix = new double[TokenizerPython.maxKindSize];
 		for (Integer kind : kindlist) {
@@ -44,7 +63,7 @@ public class MatrixUtil {
 		return matrix;
 	}
 
-	public static double[][] convertKindListToMatrix(List<List<Integer>> kindlist)  {
+	public static double[][] convertKindListToMatrix(List<List<Integer>> kindlist) {
 
 		double[][] matrix = new double[TokenizerPython.maxKindSize][kindlist.size()];
 		int i = 0;

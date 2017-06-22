@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 
 import net.sf.javaml.clustering.Clusterer;
 import net.sf.javaml.core.Dataset;
@@ -17,7 +16,6 @@ import net.sf.javaml.core.DenseInstance;
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.distance.DistanceMeasure;
 import net.sf.javaml.distance.EuclideanDistance;
-import net.sf.javaml.tools.DatasetTools;
 import sdong.defectAI.utils.Utils;
 
 /**
@@ -45,11 +43,6 @@ public class KMeansPlus implements Clusterer {
 	 * 
 	 */
 	private int numberOfIterations = -1;
-
-	/**
-	 * Random generator for this clusterer.
-	 */
-	private Random rg;
 
 	/**
 	 * The distance measure used in the algorithm, defaults to Euclidean
@@ -123,15 +116,12 @@ public class KMeansPlus implements Clusterer {
 		// being clustered. These points represent the initial group of
 		// centroids.
 		// DatasetTools.
-		Instance min = DatasetTools.minAttributes(data);
-		Instance max = DatasetTools.maxAttributes(data);
 
 		int instanceLength = data.instance(0).noAttributes();
 
 		int iterationCount = 0;
 		boolean centroidsChanged = true;
-		boolean randomCentroids = true;
-		while (randomCentroids || (iterationCount < this.numberOfIterations && centroidsChanged)) {
+		while (iterationCount < this.numberOfIterations && centroidsChanged) {
 			iterationCount++;
 			// Assign each object to the group that has the closest centroid.
 			int[] assignment = new int[data.size()];
@@ -164,29 +154,17 @@ public class KMeansPlus implements Clusterer {
 				countPosition[assignment[i]]++;
 			}
 			centroidsChanged = false;
-			randomCentroids = false;
 			for (int i = 0; i < this.numberOfClusters; i++) {
-				if (countPosition[i] > 0) {
-					double[] tmp = new double[instanceLength];
-					for (int j = 0; j < instanceLength; j++) {
-						tmp[j] = (float) sumPosition[i][j] / countPosition[i];
-					}
-					Instance newCentroid = new DenseInstance(tmp);
-					if (dm.measure(newCentroid, centroids.get(i)) > 0.0001) {
-						centroidsChanged = true;
-						centroids.set(i, newCentroid);
-					}
-				} else {
-					double[] randomInstance = new double[instanceLength];
-					for (int j = 0; j < instanceLength; j++) {
-						double dist = Math.abs(max.value(j) - min.value(j));
-						randomInstance[j] = (float) (min.value(j) + rg.nextDouble() * dist);
 
-					}
-					randomCentroids = true;
-					centroids.set(i, new DenseInstance(randomInstance));
+				double[] tmp = new double[instanceLength];
+				for (int j = 0; j < instanceLength; j++) {
+					tmp[j] = (float) sumPosition[i][j] / countPosition[i];
 				}
-
+				Instance newCentroid = new DenseInstance(tmp);
+				if (dm.measure(newCentroid, centroids.get(i)) > 0.0001) {
+					centroidsChanged = true;
+					centroids.set(i, newCentroid);
+				}
 			}
 
 		}
@@ -238,7 +216,9 @@ public class KMeansPlus implements Clusterer {
 			String[] node = entry.getKey().split(",");
 			Instance nodeOne = data.get(Integer.parseInt(node[0]));
 			Instance nodeTwo = data.get(Integer.parseInt(node[1]));
-			System.out.println(nodeOne.getID() + "," + nodeTwo.getID());
+			
+			//System.out.println(nodeOne.getID() + "," + nodeTwo.getID());
+			
 			if (distance < averageDis)
 				break;// 如果接下来的元组，两节点间距离小于平均距离，则不继续迭代
 			if (!flag) {

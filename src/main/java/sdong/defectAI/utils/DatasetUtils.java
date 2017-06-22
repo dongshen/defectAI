@@ -77,13 +77,12 @@ public class DatasetUtils {
 	public static void exportDatasetWithCluster(Dataset[] clusters, String outpath) throws DefectAIException {
 
 		try {
-
 			PrintStream out = new PrintStream(outpath);
 			for (int i = 0; i < clusters.length; i++) {
 				for (Instance inst : clusters[i]) {
 					out.print(string(inst, ","));
 					if (inst.classValue() != null) {
-						out.print(inst.classValue());
+						out.print("," + inst.classValue());
 						out.println("," + i);
 					} else {
 						out.println(i);
@@ -155,5 +154,13 @@ public class DatasetUtils {
 			clusterlist.add(inst.getID() + "");
 		}
 		return clusterlist;
+	}
+
+	public static void multiplyInstance(Dataset dataset, Instance instance) {
+		for (Instance data : dataset) {
+			for (int i = 0; i < data.noAttributes(); i++) {
+				data.put(i, data.value(i) * instance.value(i));
+			}
+		}
 	}
 }
