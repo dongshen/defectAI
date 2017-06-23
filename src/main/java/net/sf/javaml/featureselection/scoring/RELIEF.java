@@ -11,6 +11,7 @@ import net.sf.javaml.core.Instance;
 import net.sf.javaml.distance.ManhattanDistance;
 import net.sf.javaml.featureselection.FeatureScoring;
 import net.sf.javaml.filter.normalize.NormalizeMidrange;
+import net.sf.javaml.tools.DatasetTools;
 
 /**
  * Implementation of the RELIEF attribute evaluation algorithm.
@@ -32,7 +33,10 @@ public class RELIEF implements FeatureScoring {
 	private int numNeighbors;
 
 	private Random rg;
-
+	
+	Instance max;
+	Instance min;
+	
 	public RELIEF() {
 		this(-1, new Random(System.currentTimeMillis()));
 	}
@@ -50,10 +54,9 @@ public class RELIEF implements FeatureScoring {
 		weights = new double[data.noAttributes()];
 
 		/* Normalize the data to [0,1] */
-
 		NormalizeMidrange dnm = new NormalizeMidrange(0.5, 1);
 		dnm.filter(data);
-
+      
 		/* Number of iterations */
 		int m = data.size();
 

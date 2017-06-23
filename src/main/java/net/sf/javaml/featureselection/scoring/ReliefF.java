@@ -36,7 +36,7 @@ public class ReliefF implements FeatureScoring {
 	private Random rg;
 
 	public ReliefF() {
-		this(2, new Random(System.currentTimeMillis()));
+		this(-1, new Random(System.currentTimeMillis()));
 	}
 
 	public ReliefF(int numNeighbors, Random rg) {
@@ -60,7 +60,8 @@ public class ReliefF implements FeatureScoring {
 		int m = data.size();
 
 		for (int i = 0; i < m; i++) {
-			Instance random = data.instance(rg.nextInt(data.size()));
+			//Instance random = data.instance(rg.nextInt(data.size()));
+			Instance random = data.instance(i);
 			findNearest(data, random);
 			for (int j = 0; j < weights.length; j++)
 				weights[j] = weights[j] - diff(j, random, nearestHit) / m + diff(j, random, nearestMissList) / m;
@@ -107,7 +108,7 @@ public class ReliefF implements FeatureScoring {
 				String key = (String) i.classValue();
 				if (i.classValue().equals(random.classValue())) {
 					nearestHit.add(i);
-					if (nearestHit.size() > numNeighbors)
+					if (numNeighbors != -1 && nearestHit.size() > numNeighbors)
 						removeFarthest(nearestHit, random);
 				} else {
 					Vector<Instance> nearestMiss = nearestMissList.get(i.classValue());
@@ -115,7 +116,7 @@ public class ReliefF implements FeatureScoring {
 						nearestMiss = new Vector<Instance>();
 					}
 					nearestMiss.add(i);
-					if (nearestMissList.size() > numNeighbors)
+					if (numNeighbors != -1 && nearestMissList.size() > numNeighbors)
 						removeFarthest(nearestMiss, random);
 					nearestMissList.put(key, nearestMiss);
 				}

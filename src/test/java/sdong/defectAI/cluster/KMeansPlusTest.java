@@ -120,10 +120,10 @@ public class KMeansPlusTest {
 	}
 
 	@Test
-	public void testCluster_iris_weight() {
+	public void testCluster_iris_relief_weight() {
 		try {
 			Dataset data = FileHandler.loadDataset(new File("input/iris.data"), 4, ",");
-			Dataset weights = FileHandler.loadDataset(new File("output/weight/iris/iris_all.txt"), -1, ",");
+			Dataset weights = FileHandler.loadDataset(new File("output/weight/iris/iris_relief_all.txt"), -1, ",");
 			Instance inst = weights.instance(0);
 			WeightSetting weight = new WeightSetting(InstanceTools.array(inst));
 			DatasetUtils.multiplyInstance(data, weight);
@@ -132,7 +132,39 @@ public class KMeansPlusTest {
 			Dataset[] clusters = km.cluster(data);
 			assertEquals(3, clusters.length);
 
-			DatasetUtils.exportDatasetWithCluster(clusters, "output/kmeansplus/iris/iris_weight.txt");
+			DatasetUtils.exportDatasetWithCluster(clusters, "output/kmeansplus/iris/iris_relief_weight.txt");
+			String[][] rate = DatasetUtils.checkRate(clusters, data);
+			assertEquals("Iris-setosa", rate[0][0]);
+			assertEquals("1.0", rate[0][1]);
+
+			assertEquals("Iris-virginica", rate[1][0]);
+			assertEquals("0.84", rate[1][1]);
+
+			assertEquals("Iris-versicolor", rate[2][0]);
+			assertEquals("0.98", rate[2][1]);
+
+		} catch (IOException e) {
+			Assert.assertTrue(false);
+		} catch (DefectAIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testCluster_iris_relieff_weight() {
+		try {
+			Dataset data = FileHandler.loadDataset(new File("input/iris.data"), 4, ",");
+			Dataset weights = FileHandler.loadDataset(new File("output/weight/iris/iris_relieff_all.txt"), -1, ",");
+			Instance inst = weights.instance(0);
+			WeightSetting weight = new WeightSetting(InstanceTools.array(inst));
+			DatasetUtils.multiplyInstance(data, weight);
+
+			KMeansPlus km = new KMeansPlus();
+			Dataset[] clusters = km.cluster(data);
+			assertEquals(3, clusters.length);
+
+			DatasetUtils.exportDatasetWithCluster(clusters, "output/kmeansplus/iris/iris_relieff_weight.txt");
 			String[][] rate = DatasetUtils.checkRate(clusters, data);
 			assertEquals("Iris-setosa", rate[0][0]);
 			assertEquals("1.0", rate[0][1]);
