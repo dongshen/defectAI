@@ -150,7 +150,7 @@ public class KMeansPlusTest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void testCluster_iris_relieff_weight() {
 		try {
@@ -175,6 +175,107 @@ public class KMeansPlusTest {
 			assertEquals("Iris-versicolor", rate[2][0]);
 			assertEquals("0.98", rate[2][1]);
 
+		} catch (IOException e) {
+			Assert.assertTrue(false);
+		} catch (DefectAIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testCluster_iris_relieff_weight_N2() {
+		try {
+			Dataset data = FileHandler.loadDataset(new File("input/iris.data"), 4, ",");
+			Dataset weights = FileHandler.loadDataset(new File("output/weight/iris/iris_relieff_N2.txt"), -1, ",");
+			Instance inst = weights.instance(0);
+			WeightSetting weight = new WeightSetting(InstanceTools.array(inst));
+			DatasetUtils.multiplyInstance(data, weight);
+
+			KMeansPlus km = new KMeansPlus();
+			Dataset[] clusters = km.cluster(data);
+			assertEquals(3, clusters.length);
+
+			DatasetUtils.exportDatasetWithCluster(clusters, "output/kmeansplus/iris/iris_relieff_weight_N2.txt");
+			String[][] rate = DatasetUtils.checkRate(clusters, data);
+			assertEquals("Iris-setosa", rate[0][0]);
+			assertEquals("1.0", rate[0][1]);
+
+			assertEquals("Iris-virginica", rate[1][0]);
+			assertEquals("0.74", rate[1][1]);
+
+			assertEquals("Iris-versicolor", rate[2][0]);
+			assertEquals("1.0", rate[2][1]);
+
+		} catch (IOException e) {
+			Assert.assertTrue(false);
+		} catch (DefectAIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testCluster_iris_relieff_weight_N10() {
+		try {
+			Dataset data = FileHandler.loadDataset(new File("input/iris.data"), 4, ",");
+			Dataset weights = FileHandler.loadDataset(new File("output/weight/iris/iris_relieff_N10.txt"), -1, ",");
+			Instance inst = weights.instance(0);
+			WeightSetting weight = new WeightSetting(InstanceTools.array(inst));
+			DatasetUtils.multiplyInstance(data, weight);
+
+			KMeansPlus km = new KMeansPlus();
+			Dataset[] clusters = km.cluster(data);
+			assertEquals(3, clusters.length);
+
+			DatasetUtils.exportDatasetWithCluster(clusters, "output/kmeansplus/iris/iris_relieff_weight_N10.txt");
+			String[][] rate = DatasetUtils.checkRate(clusters, data);
+			assertEquals("Iris-setosa", rate[0][0]);
+			assertEquals("1.0", rate[0][1]);
+
+			assertEquals("Iris-virginica", rate[1][0]);
+			assertEquals("0.74", rate[1][1]);
+
+			assertEquals("Iris-versicolor", rate[2][0]);
+			assertEquals("1.0", rate[2][1]);
+
+		} catch (IOException e) {
+			Assert.assertTrue(false);
+		} catch (DefectAIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testCluster_iris_relieff_weight_N() {
+		try {
+			Dataset data = FileHandler.loadDataset(new File("input/iris.data"), 4, ",");
+			for (int i = 1; i < 50; i++) {
+				Dataset weights = FileHandler.loadDataset(new File("output/weight/iris/iris_relieff_N" + i + ".txt"),
+						-1, ",");
+				Instance inst = weights.instance(0);
+				WeightSetting weight = new WeightSetting(InstanceTools.array(inst));
+				DatasetUtils.multiplyInstance(data, weight);
+
+				KMeansPlus km = new KMeansPlus();
+				Dataset[] clusters = km.cluster(data);
+				assertEquals(3, clusters.length);
+
+				DatasetUtils.exportDatasetWithCluster(clusters,
+						"output/kmeansplus/iris/iris_relieff_weight_N" + i + ".txt");
+			}
+			/*
+			 * String[][] rate = DatasetUtils.checkRate(clusters, data);
+			 * assertEquals("Iris-setosa", rate[0][0]); assertEquals("1.0",
+			 * rate[0][1]);
+			 * 
+			 * assertEquals("Iris-virginica", rate[1][0]); assertEquals("0.74",
+			 * rate[1][1]);
+			 * 
+			 * assertEquals("Iris-versicolor", rate[2][0]); assertEquals("1.0",
+			 * rate[2][1]);
+			 */
 		} catch (IOException e) {
 			Assert.assertTrue(false);
 		} catch (DefectAIException e) {
