@@ -50,13 +50,19 @@
 
 		<dependency>
 			<groupId>be.abeel</groupId>
-			<artifactId>jat</artifactId>
+			<artifactId>ajt</artifactId>
 			<version>2.11</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/lib/ajt-2.11.jar</systemPath>
 		</dependency>
 
-
+		<!-- https://mvnrepository.com/artifact/org.apache.spark/spark-mllib_2.10 -->
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-mllib_2.10</artifactId>
+			<version>2.2.0</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
 		<dependency>
@@ -64,6 +70,22 @@
 			<artifactId>commons-collections4</artifactId>
 			<version>4.1</version>
 		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/com.github.lucarosellini.rJava/JRI -->
+		<dependency>
+			<groupId>com.github.lucarosellini.rJava</groupId>
+			<artifactId>JRI</artifactId>
+			<version>0.9-7</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.github.lucarosellini.rJava/REngine -->
+		<dependency>
+			<groupId>com.github.lucarosellini.rJava</groupId>
+			<artifactId>REngine</artifactId>
+			<version>0.9-7</version>
+		</dependency>
+
 
 		<!-- https://mvnrepository.com/artifact/junit/junit -->
 		<dependency>
