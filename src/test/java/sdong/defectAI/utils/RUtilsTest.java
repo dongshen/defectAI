@@ -1,5 +1,6 @@
 package sdong.defectAI.utils;
 
+import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
@@ -47,7 +48,8 @@ public class RUtilsTest {
 
 			KMeansPlus km = new KMeansPlus();
 			Dataset[] clusters = km.cluster(data);
-			RUtils.evaluateS_dbw(clusters);
+			double s_dbw = RUtils.evaluateS_dbw(clusters);
+			assertEquals(new Double(0.1666394273608567), new Double(s_dbw));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

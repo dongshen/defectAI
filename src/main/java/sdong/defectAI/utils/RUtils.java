@@ -40,20 +40,33 @@ public class RUtils {
 	public static double evaluateS_dbw(Dataset[] clusters) throws DefectAIException {
 		double s_dbw = 0d;
 		Rengine re = getREngine();
-		List<Double> data = new ArrayList<Double>();
-		int cluster = clusters.length;
+		int ncol = clusters[0].get(0).noAttributes();
+		int nrow = 0;
 		for (Dataset dataset : clusters) {
+			nrow = nrow + dataset.size();
+		}
+
+		int[] clusterTag = new int[nrow];
+
+		List<Double> data = new ArrayList<Double>();
+
+		int size = 0;
+		for (int j = 0; j < clusters.length; j++) {
+			Dataset dataset = clusters[j];
 			for (int i = 0; i < dataset.size(); i++) {
 				Instance instance = dataset.get(i);
 				data.addAll(instance.values());
+				clusterTag[size] = j;
+				size = size + 1;
 			}
 		}
-		
-		re.assign("data", data.stream().mapToDouble(Double::doubleValue).toArray());
 
-		re.eval("x<-matrix(data, ncol = 3,nrow=150,byrow = TRUE)");
-		re.eval("intIdx <- intCriteria(x,cl$cluster,\"s_dbw\")");
-		s_dbw = re.eval("intIdx[[\"s_dbs\"]]").asDouble();
+		re.assign("data", data.stream().mapToDouble(Double::doubleValue).toArray());
+		re.assign("c", clusterTag);
+		re.eval("x<-matrix(data, ncol = " + ncol + ",nrow=" + nrow + ",byrow = TRUE)");
+		re.eval("intIdx <- intCriteria(x,c,\"s_dbw\")");
+		s_dbw = re.eval("intIdx[[\"s_dbw\"]]").asDouble();
+		LOG.debug("s_dwb=" + s_dbw);
 		return s_dbw;
 	}
 }
