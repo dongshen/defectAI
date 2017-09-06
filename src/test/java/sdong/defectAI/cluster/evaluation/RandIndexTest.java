@@ -1,35 +1,122 @@
 package sdong.defectAI.cluster.evaluation;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Logger;
 
+import org.apache.log4j.Logger;
+import org.junit.Before;
 import org.junit.Test;
 
-public class RandIndexTest {
-	private Logger LOG = Logger.getLogger(this.getClass().getName());
-	//private static final Logger LOG = Logger.getLogger(FileUtil.class);
 
+
+public class RandIndexTest {
+	//private Logger LOG = Logger.getLogger(this.getClass().getName());
+
+	private Logger LOG = Logger.getLogger(this.getClass().getName());
+	
+	List<List<Integer>> dataset = new ArrayList<List<Integer>>();
+	List<List<Integer>> dataset2 = new ArrayList<List<Integer>>();
+	
+	@Before
+	public void prepare(){
+		
+		//dataset.add(Arrays.asList( new Integer[]{1, 1, 1, 1, 1, 2}));
+		//dataset.add(Arrays.asList( new Integer[]{1, 2, 2, 2, 2, 3})); 
+		//dataset.add(Arrays.asList( new Integer[]{1, 1, 3, 3, 3})); 
+		
+		//case2
+		dataset2.add(Arrays.asList( new Integer[]{1, 1, 1, 1, 1, 2,3}));
+		dataset2.add(Arrays.asList( new Integer[]{1, 2, 2, 2, 2, 3}));
+		dataset2.add(Arrays.asList( new Integer[]{1, 1, 3, 3, 3,2})); 
+		//TP+FP = C(7,2)+C(6,2)+C(6,2)=21+15+15=51
+		//TP = C(5,2)+C(4,2)+C(2,2)+C(3,2)=10+6+1+3=20
+		//FN = C(5,1)+C(5,2)+C(2,1)+C(4,1)+C(4,1)+C(1,1)+C(1,1)+C(3,1)+C(3,1)=5+10+2+4+4+1+1+3+3=33
+		//TN = C(19,2)-51-33=87
+		
+		LOG.debug(dataset.toString());
+	}
+	
 	@Test
 	public void testCalculateIndex() {
-		List<List<Integer>> dataset = getTestData();
+		RandIndex index = new RandIndex(dataset);
+		
+		assertEquals(40, index.getTPAndFP());
+		LOG.debug("TP&FP="+index.getTPAndFP());
+		
+		assertEquals(20, index.getTP());
+		LOG.debug("TP="+index.getTP());
+		
+		assertEquals(20, index.getFP());
+		LOG.debug("FP="+index.getFP());
+		
+		assertEquals(24, index.getFN());
+		LOG.debug("FN="+index.getFN());
+		
+		assertEquals(72, index.getTN());
+		LOG.debug("TN="+index.getTN());
+		
+		assertEquals(new Double(0.6764705882352942), new Double(index.getRI()));
+		LOG.debug("RI="+index.getRI());
+		
+		assertEquals(new Double(0.5), new Double(index.getP()));
+		LOG.debug("P="+index.getP());
+		
+		assertEquals(new Double(0.45454545454545453), new Double(index.getR()));
+		LOG.debug("R="+index.getR());
+		
+		assertEquals(new Double(0.47619047619047616), new Double(index.getF()));
+		LOG.debug("F="+index.getF());
+		
+		assertEquals(new Double(0.7058823529411765), new Double(index.getPurity()));
+		LOG.debug("Purify="+index.getPurity());
+		
 	}
+	
+	@Test
+	public void testCalculateIndex2() {
+		RandIndex index = new RandIndex(dataset2);
+		
+		//assertEquals(51, index.getTPAndFP());
+		LOG.debug("TP&FP="+index.getTPAndFP());
+		
+		//assertEquals(20, index.getTP());
+		LOG.debug("TP="+index.getTP());
+		
+		//assertEquals(20, index.getFP());
+		LOG.debug("FP="+index.getFP());
+		
+		//assertEquals(24, index.getFN());
+		LOG.debug("FN="+index.getFN());
+		
+		//assertEquals(72, index.getTN());
+		LOG.debug("TN="+index.getTN());
+		
+		//assertEquals(new Double(0.6764705882352942), new Double(index.getRI()));
+		LOG.debug("RI="+index.getRI());
+		
+		//assertEquals(new Double(0.5), new Double(index.getP()));
+		LOG.debug("P="+index.getP());
+		
+		//assertEquals(new Double(0.45454545454545453), new Double(index.getR()));
+		LOG.debug("R="+index.getR());
+		
+		//assertEquals(new Double(0.47619047619047616), new Double(index.getF()));
+		LOG.debug("F="+index.getF());
+		
+		//assertEquals(new Double(0.7058823529411765), new Double(index.getPurity()));
+		LOG.debug("Purify="+index.getPurity());
+		
+	}
+
 
 	@Test 
 	public void testCalculateNMI() {
 		fail("Not yet implemented");
 	}
 
-	private List<List<Integer>> getTestData(){
-		List<List<Integer>> lists = new ArrayList<List<Integer>>();
-		lists.add(Arrays.asList( new Integer[]{1, 1, 1, 1, 1, 2}));
-		lists.add(Arrays.asList( new Integer[]{1, 2, 2, 2, 2, 3})); 
-		lists.add(Arrays.asList( new Integer[]{1, 1, 3, 3, 3})); 
-		LOG.info(lists.toString());
-		return lists;
-	}
-
+	
 }
