@@ -24,9 +24,11 @@ public class RandIndexTest {
 	@Before
 	public void prepare(){
 		
-		//dataset.add(Arrays.asList( new Integer[]{1, 1, 1, 1, 1, 2}));
-		//dataset.add(Arrays.asList( new Integer[]{1, 2, 2, 2, 2, 3})); 
-		//dataset.add(Arrays.asList( new Integer[]{1, 1, 3, 3, 3})); 
+		//case 1
+		dataset.add(Arrays.asList( new Integer[]{1, 1, 1, 1, 1, 2}));
+		dataset.add(Arrays.asList( new Integer[]{1, 2, 2, 2, 2, 3})); 
+		dataset.add(Arrays.asList( new Integer[]{1, 1, 3, 3, 3})); 
+		LOG.debug(dataset.toString());
 		
 		//case2
 		dataset2.add(Arrays.asList( new Integer[]{1, 1, 1, 1, 1, 2,3}));
@@ -37,7 +39,7 @@ public class RandIndexTest {
 		//FN = C(5,1)+C(5,2)+C(2,1)+C(4,1)+C(4,1)+C(1,1)+C(1,1)+C(3,1)+C(3,1)=5+10+2+4+4+1+1+3+3=33
 		//TN = C(19,2)-51-33=87
 		
-		LOG.debug(dataset.toString());
+		LOG.debug(dataset2.toString());
 	}
 	
 	@Test
@@ -115,7 +117,8 @@ public class RandIndexTest {
 
 	@Test 
 	public void testCalculateNMI() {
-		fail("Not yet implemented");
+		double nmi = RandIndex.calculateNMI(dataset);
+		assertEquals(new Double(0.36456177185718985), new Double(nmi));
 	}
 
 	

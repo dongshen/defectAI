@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.esotericsoftware.minlog.Log;
+
 public class RandIndex {
 
 	int TPAndFP;
@@ -28,19 +30,12 @@ public class RandIndex {
 
 	public RandIndex(List<List<Integer>> lists) {
 
-		int[] clusters = ClusterUtils.computeClusterSize(lists);
-		int N = ClusterUtils.computeDataSetSize(clusters);
+		int[] clusterSizeList = ClusterUtils.computeClusterSize(lists);
+		int N = ClusterUtils.computeDataSetSize(clusterSizeList);
 
-		TPAndFP = ClusterUtils.computeTPAndFP(clusters);
+		TPAndFP = ClusterUtils.computeTPAndFP(clusterSizeList);
 		//每个聚类中每种分类的数量 the count of each type in cluster
-		List<Map<Integer, Integer>> mapList = new ArrayList<>();
-		for (List<Integer> list : lists) {
-			Map<Integer, Integer> map = new HashMap<>();
-			for (Integer integer : list) {
-				map.put(integer, map.getOrDefault(integer, 0) + 1);
-			}
-			mapList.add(map);
-		}
+		List<Map<Integer, Integer>> mapList = getCountForEachTypeInCluster(lists);
 		
 		//分类列表  type list
 		Set<Integer> set = new HashSet<>();
@@ -89,11 +84,11 @@ public class RandIndex {
 	/**
 	 * println Normalized Mutual Information
 	 */
-	public static void calculateNMI(List<List<Integer>> lists) {
+	public static double calculateNMI(List<List<Integer>> lists) {
 		int K = lists.size();
 		
-		int[] clusters = ClusterUtils.computeClusterSize(lists);
-		int N = ClusterUtils.computeDataSetSize(clusters);
+		int[] clusterSizeList = ClusterUtils.computeClusterSize(lists);
+		int N = ClusterUtils.computeDataSetSize(clusterSizeList);
 		
 		Map<Integer, Integer> map = new HashMap<>();
 		for (List<Integer> list : lists) {
@@ -102,21 +97,23 @@ public class RandIndex {
 			}
 		}
 		double clusterEntropy = 0;
-		for (int cluster : clusters) {
+		for (int cluster : clusterSizeList) {
 			double tmp = 1.0 * cluster / N;
 			clusterEntropy -= (tmp * (Math.log(tmp) / Math.log(2)));
 		}
-		// System.out.println("clusterEntropy = " + clusterEntropy);
+		Log.debug("clusterEntropy = " + clusterEntropy);
+		
 		double classEntropy = 0;
 		for (Integer integer : map.values()) {
 			double tmp = 1.0 * integer / N;
 			classEntropy -= (tmp * (Math.log(tmp) / Math.log(2)));
 		}
-		// System.out.println("classEntropy = " + classEntropy);
+		Log.debug("classEntropy = " + classEntropy);
+		
 		double totalEntropy = 0;
 		Map<Integer, Integer> tmpMap = new HashMap<>();
 		for (int i = 0; i < K; i++) {
-			int wk = clusters[i];
+			int wk = clusterSizeList[i];
 			tmpMap.clear();
 			for (Integer integer : lists.get(i)) {
 				tmpMap.put(integer, tmpMap.getOrDefault(integer, 0) + 1);
@@ -127,11 +124,26 @@ public class RandIndex {
 				totalEntropy += (1.0 * value / N * (Math.log(1.0 * N * value / (wk * cj)) / Math.log(2)));
 			}
 		}
-		// System.out.println("totalEntropy = " + totalEntropy);
+		Log.debug("totalEntropy = " + totalEntropy);
+		
 		double nmi = 2 * totalEntropy / (clusterEntropy + classEntropy);
-		System.out.println(String.format("nmi = %.2f", nmi));
+		Log.debug(String.format("nmi = %.2f", nmi));
+		
+		return nmi;
 	}
 
+	private List<Map<Integer, Integer>> getCountForEachTypeInCluster(List<List<Integer>> lists){
+		List<Map<Integer, Integer>> mapList = new ArrayList<>();
+		for (List<Integer> list : lists) {
+			Map<Integer, Integer> map = new HashMap<>();
+			for (Integer integer : list) {
+				map.put(integer, map.getOrDefault(integer, 0) + 1);
+			}
+			mapList.add(map);
+		}
+		return mapList;
+	}
+	
 	public int getTPAndFP() {
 		return TPAndFP;
 	}

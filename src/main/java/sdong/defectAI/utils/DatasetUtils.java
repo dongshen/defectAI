@@ -163,4 +163,65 @@ public class DatasetUtils {
 			}
 		}
 	}
+
+	public static Map<String, Integer> getDatasetTypeAsInt(Dataset dataset) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		Integer typeId = 0;
+		for (Instance inst : dataset) {
+			if (!map.containsKey(inst.classValue())) {
+				map.put((String) inst.classValue(), typeId);
+				typeId = typeId + 1;
+			}
+		}
+		return map;
+	}
+
+	public static Map<String, Integer> getClusterTypeAsInt(Dataset[] clusters) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		Integer typeId = 0;
+		for (Dataset dataset : clusters) {
+			for (Instance inst : dataset) {
+				if (!map.containsKey(inst.classValue())) {
+					map.put((String) inst.classValue(), typeId);
+					typeId = typeId + 1;
+				}
+			}
+		}
+		return map;
+	}
+
+	public static int[] convertDatasetToArray(Dataset dataset) {
+
+		int[] array = new int[dataset.size()];
+		Map<String, Integer> map = getDatasetTypeAsInt(dataset);
+		for (int i = 0; i < dataset.size(); i++) {
+			array[i] = map.get(dataset.get(i).classValue());
+		}
+		return array;
+	}
+
+	public static int getClusterSize(Dataset[] clusters) {
+		int size = 0;
+		for (Dataset dataset : clusters) {
+			size = size + dataset.size();
+		}
+		return size;
+	}
+
+	public static int[][] convertClusterToArray(Dataset[] clusters) {
+		int size = getClusterSize(clusters);
+		int[][] array = new int[2][size];
+		Map<String, Integer> map = getClusterTypeAsInt(clusters);
+		int i = 0;
+		int type = 0;
+		for (Dataset dataset : clusters) {
+			for (Instance inst : dataset) {
+				array[0][i] = map.get(inst.classValue()).intValue();
+				array[1][i] = type;
+				i = i + 1;
+			}
+			type = type + 1;
+		}
+		return array;
+	}
 }

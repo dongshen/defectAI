@@ -30,9 +30,25 @@ public class RUtils {
 		return re;
 	}
 
-	public static double evaluateFValue() throws DefectAIException {
-		double FValue = 0d;
+	public static double externalIndices(int[] part1, int[] part2, String indices) throws DefectAIException {
+		double extIdx = 0d;
+
 		Rengine re = getREngine();
+		re.assign("part1", part1);
+		re.assign("part2", part2);
+		re.eval("extIdx <- extCriteria(part1,part2,\"" + indices + "\")");
+
+		extIdx = re.eval("extIdx[[\""+indices+"\"]]").asDouble();
+		LOG.debug(extIdx + "=" + extIdx);
+		return extIdx;
+	}
+
+	public static double evaluateFValue(Dataset[] clusters) throws DefectAIException {
+		double FValue = 0d;
+
+		int[][] data = DatasetUtils.convertClusterToArray(clusters);
+
+		FValue = externalIndices(data[0], data[1], "Calinski_Harabasz");
 
 		return FValue;
 	}

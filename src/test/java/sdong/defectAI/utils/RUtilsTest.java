@@ -58,4 +58,23 @@ public class RUtilsTest {
 			e.printStackTrace();
 		}
 	}
+	
+	@Test
+	public void testEvaluateFValue() {
+		Dataset data;
+		try {
+			data = FileHandler.loadDataset(new File("input/iris.data"), 4, ",");
+
+			KMeansPlus km = new KMeansPlus();
+			Dataset[] clusters = km.cluster(data);
+			double s_dbw = RUtils.evaluateFValue(clusters);
+			assertEquals(new Double(0.1666394273608567), new Double(s_dbw));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DefectAIException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

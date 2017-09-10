@@ -14,9 +14,9 @@ public class ClusterUtils {
 		return clusters;
 	}
 
-	public static int computeDataSetSize(int[] clusters) {
+	public static int computeDataSetSize(int[] clusterSizeList) {
 		int size = 0;
-		for (int s : clusters) {
+		for (int s : clusterSizeList) {
 			size = size + s;
 		}
 		return size;
@@ -36,9 +36,9 @@ public class ClusterUtils {
 		return data[k];
 	}
 
-	public static int computeTPAndFP(int[] clusters) {
+	public static int computeTPAndFP(int[] clusterSizeList) {
 		int result = 0;
-		for (int cluster : clusters) {
+		for (int cluster : clusterSizeList) {
 			result += combination(cluster, 2);
 		}
 		return result;
