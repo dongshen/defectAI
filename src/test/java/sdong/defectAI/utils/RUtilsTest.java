@@ -18,7 +18,7 @@ import sdong.defectAI.exception.DefectAIException;
 public class RUtilsTest {
 	@Test
 	public void testR() {
-		// Start Rengine.
+		// Start R engine.
 		Rengine re;
 		try {
 			re = RUtils.getREngine();
@@ -67,8 +67,8 @@ public class RUtilsTest {
 
 			KMeansPlus km = new KMeansPlus();
 			Dataset[] clusters = km.cluster(data);
-			double s_dbw = RUtils.evaluateFValue(clusters);
-			assertEquals(new Double(0.1666394273608567), new Double(s_dbw));
+			double FValue = RUtils.evaluateFValue(clusters);
+			assertEquals(new Double(0.8206565380096436), new Double(FValue));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

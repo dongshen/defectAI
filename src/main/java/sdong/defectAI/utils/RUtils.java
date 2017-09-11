@@ -36,10 +36,12 @@ public class RUtils {
 		Rengine re = getREngine();
 		re.assign("part1", part1);
 		re.assign("part2", part2);
+		//re.eval("part1 <- as.integer(part1)");
+		//re.eval("part2 <- as.integer(part2)");
 		re.eval("extIdx <- extCriteria(part1,part2,\"" + indices + "\")");
 
 		extIdx = re.eval("extIdx[[\""+indices+"\"]]").asDouble();
-		LOG.debug(extIdx + "=" + extIdx);
+		//LOG.debug(indices + "=" + extIdx);
 		return extIdx;
 	}
 
@@ -48,8 +50,8 @@ public class RUtils {
 
 		int[][] data = DatasetUtils.convertClusterToArray(clusters);
 
-		FValue = externalIndices(data[0], data[1], "Calinski_Harabasz");
-
+		FValue = externalIndices(data[0], data[1], "czekanowski_dice");
+		LOG.debug("FValue=" + FValue);
 		return FValue;
 	}
 

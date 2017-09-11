@@ -117,37 +117,6 @@ public class DatasetUtils {
 		return out.toString();
 	}
 
-	public static String[][] checkRate(Dataset[] clusters, Dataset data) {
-		String[][] clusterrate = new String[clusters.length][4];
-		Map<String, List<String>> expectlist = new HashMap<String, List<String>>();
-		String key;
-		List<String> clusterlist;
-		for (Instance inst : data) {
-			key = (String) inst.classValue();
-			clusterlist = expectlist.get(key);
-			if (clusterlist == null) {
-				clusterlist = new ArrayList<String>();
-				expectlist.put(key, clusterlist);
-			}
-			clusterlist.add(inst.getID() + "");
-		}
-
-		// rate
-		String[] rate;
-		Result_verify iris = new Result_verify();
-		iris.setResultmap(expectlist);
-		int i = 0;
-		for (Dataset list : clusters) {
-			rate = iris.checkMatchRate(getDatasetIndexList(list));
-			System.out.println("Cluster " + i + " match " + rate[0] + " rate: " + rate[1] + ", not match rate: "
-					+ rate[2] + " size: " + rate[3]);
-			clusterrate[i] = rate;
-			i = i + 1;
-		}
-
-		return clusterrate;
-	}
-
 	public static List<String> getDatasetIndexList(Dataset dataset) {
 		List<String> clusterlist = new ArrayList<String>();
 		for (Instance inst : dataset) {
@@ -223,5 +192,20 @@ public class DatasetUtils {
 			type = type + 1;
 		}
 		return array;
+	}
+
+	public static List<List<Integer>> convertClusterToList(Dataset[] clusters) {
+		List<List<Integer>> lists = new ArrayList<List<Integer>>();
+
+		Map<String, Integer> map = getClusterTypeAsInt(clusters);
+
+		for (Dataset dataset : clusters) {
+			List<Integer> list = new ArrayList<Integer>();
+			for (Instance inst : dataset) {
+				list.add(map.get(inst.classValue()).intValue());
+			}
+			lists.add(list);
+		}
+		return lists;
 	}
 }

@@ -1,18 +1,24 @@
 package net.sf.javaml.clustering;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
 import net.sf.javaml.core.Dataset;
 import net.sf.javaml.distance.EuclideanDistance;
 import net.sf.javaml.tools.data.FileHandler;
+import sdong.defectAI.cluster.evaluation.RandIndex;
 import sdong.defectAI.exception.DefectAIException;
 import sdong.defectAI.utils.DatasetUtils;
 
 public class TestKMeans {
+
+	private static final Logger LOG = Logger.getLogger(TestKMeans.class);
 
 	/**
 	 * Tests the k-means algorithm with default parameter settings.
@@ -64,14 +70,14 @@ public class TestKMeans {
 			 * with each data set representing a cluster
 			 */
 			Dataset[] clusters = km.cluster(data);
-			System.out.println("Cluster count: " + clusters.length);
-			
-			DatasetUtils.checkRate(clusters, data);
-			
+			LOG.debug("Cluster count: " + clusters.length);
+
+			RandIndex index = new RandIndex(clusters);
+			assertEquals(new Double(0.8111363940570205), new Double(index.getF()));
+
 			DatasetUtils.exportDatasetWithValue(clusters, "input/iris.data",
 					"output/kmeans/javaml_iris_cluster_3k.txt");
 			DatasetUtils.exportDatasetWithCluster(clusters, "output/kmeans/javaml_iris_cluster_3k_data.txt");
-
 
 		} catch (IOException e) {
 			Assert.assertTrue(false);

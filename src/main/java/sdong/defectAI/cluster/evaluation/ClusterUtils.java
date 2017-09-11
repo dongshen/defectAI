@@ -44,16 +44,16 @@ public class ClusterUtils {
 		return result;
 	}
 
-	public static int computeFP(List<Map<Integer, Integer>> mapList) {
-		int FP = 0;
+	public static int computeTP(List<Map<Integer, Integer>> mapList) {
+		int TP = 0;
 		for (Map<Integer, Integer> map : mapList) {
 			for (Integer integer : map.values()) {
 				if (integer >= 2) {
-					FP += combination(integer, 2);
+					TP += combination(integer, 2);
 				}
 			}
 		}
-		return FP;
+		return TP;
 	}
 
 	public static int computeOneClass(List<Integer> list) {

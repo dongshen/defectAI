@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mortbay.log.Log;
 
 import net.sf.javaml.core.AbstractInstance;
 import net.sf.javaml.core.Dataset;
@@ -16,6 +17,7 @@ import net.sf.javaml.core.Instance;
 import net.sf.javaml.filter.normalize.NormalizeMidrange;
 import net.sf.javaml.tools.InstanceTools;
 import net.sf.javaml.tools.data.FileHandler;
+import sdong.defectAI.cluster.evaluation.RandIndex;
 import sdong.defectAI.exception.DefectAIException;
 import sdong.defectAI.utils.DatasetUtils;
 import sdong.defectAI.weight.WeightSetting;
@@ -62,15 +64,10 @@ public class KMeansPlusTest {
 			assertEquals(3, clusters.length);
 
 			DatasetUtils.exportDatasetWithCluster(clusters, "output/kmeansplus/iris/iris_result.txt");
-			String[][] rate = DatasetUtils.checkRate(clusters, data);
-			assertEquals("Iris-setosa", rate[0][0]);
-			assertEquals("1.0", rate[0][1]);
 
-			assertEquals("Iris-virginica", rate[1][0]);
-			assertEquals("0.72", rate[1][1]);
-
-			assertEquals("Iris-versicolor", rate[2][0]);
-			assertEquals("0.96", rate[2][1]);
+			// evaluation
+			RandIndex index = new RandIndex(clusters);
+			assertEquals(new Double(0.8206565252201762), new Double(index.getF()));
 
 		} catch (IOException e) {
 			Assert.assertTrue(false);
@@ -95,21 +92,10 @@ public class KMeansPlusTest {
 			assertEquals(5, clusters.length);
 
 			DatasetUtils.exportDatasetWithCluster(clusters, "output/kmeansplus/iris/iris_normalize_result.txt");
-			String[][] rate = DatasetUtils.checkRate(clusters, data);
-			assertEquals("Iris-setosa", rate[0][0]);
-			assertEquals("0.72", rate[0][1]);
 
-			assertEquals("Iris-virginica", rate[1][0]);
-			assertEquals("0.54", rate[1][1]);
-
-			assertEquals("Iris-setosa", rate[2][0]);
-			assertEquals("0.28", rate[2][1]);
-
-			assertEquals("Iris-versicolor", rate[3][0]);
-			assertEquals("0.56", rate[3][1]);
-
-			assertEquals("Iris-versicolor", rate[4][0]);
-			assertEquals("0.44", rate[4][1]);
+			// evaluation
+			RandIndex index = new RandIndex(clusters);
+			assertEquals(new Double(0.6218570254724732), new Double(index.getF()));
 
 		} catch (IOException e) {
 			Assert.assertTrue(false);
@@ -133,15 +119,10 @@ public class KMeansPlusTest {
 			assertEquals(3, clusters.length);
 
 			DatasetUtils.exportDatasetWithCluster(clusters, "output/kmeansplus/iris/iris_relief_weight.txt");
-			String[][] rate = DatasetUtils.checkRate(clusters, data);
-			assertEquals("Iris-setosa", rate[0][0]);
-			assertEquals("1.0", rate[0][1]);
 
-			assertEquals("Iris-virginica", rate[1][0]);
-			assertEquals("0.84", rate[1][1]);
-
-			assertEquals("Iris-versicolor", rate[2][0]);
-			assertEquals("0.98", rate[2][1]);
+			// evaluation
+			RandIndex index = new RandIndex(clusters);
+			assertEquals(new Double(0.8893093661305582), new Double(index.getF()));
 
 		} catch (IOException e) {
 			Assert.assertTrue(false);
@@ -165,15 +146,10 @@ public class KMeansPlusTest {
 			assertEquals(3, clusters.length);
 
 			DatasetUtils.exportDatasetWithCluster(clusters, "output/kmeansplus/iris/iris_relieff_weight.txt");
-			String[][] rate = DatasetUtils.checkRate(clusters, data);
-			assertEquals("Iris-setosa", rate[0][0]);
-			assertEquals("1.0", rate[0][1]);
 
-			assertEquals("Iris-virginica", rate[1][0]);
-			assertEquals("0.84", rate[1][1]);
-
-			assertEquals("Iris-versicolor", rate[2][0]);
-			assertEquals("0.98", rate[2][1]);
+			// evaluation
+			RandIndex index = new RandIndex(clusters);
+			assertEquals(new Double(0.8893093661305582), new Double(index.getF()));
 
 		} catch (IOException e) {
 			Assert.assertTrue(false);
@@ -197,15 +173,10 @@ public class KMeansPlusTest {
 			assertEquals(3, clusters.length);
 
 			DatasetUtils.exportDatasetWithCluster(clusters, "output/kmeansplus/iris/iris_relieff_weight_N2.txt");
-			String[][] rate = DatasetUtils.checkRate(clusters, data);
-			assertEquals("Iris-setosa", rate[0][0]);
-			assertEquals("1.0", rate[0][1]);
 
-			assertEquals("Iris-virginica", rate[1][0]);
-			assertEquals("0.74", rate[1][1]);
-
-			assertEquals("Iris-versicolor", rate[2][0]);
-			assertEquals("1.0", rate[2][1]);
+			// evaluation
+			RandIndex index = new RandIndex(clusters);
+			assertEquals(new Double(0.8495810613113446), new Double(index.getF()));
 
 		} catch (IOException e) {
 			Assert.assertTrue(false);
@@ -229,15 +200,10 @@ public class KMeansPlusTest {
 			assertEquals(3, clusters.length);
 
 			DatasetUtils.exportDatasetWithCluster(clusters, "output/kmeansplus/iris/iris_relieff_weight_N10.txt");
-			String[][] rate = DatasetUtils.checkRate(clusters, data);
-			assertEquals("Iris-setosa", rate[0][0]);
-			assertEquals("1.0", rate[0][1]);
 
-			assertEquals("Iris-virginica", rate[1][0]);
-			assertEquals("0.74", rate[1][1]);
-
-			assertEquals("Iris-versicolor", rate[2][0]);
-			assertEquals("1.0", rate[2][1]);
+			// evaluation
+			RandIndex index = new RandIndex(clusters);
+			assertEquals(new Double(0.8495810613113446), new Double(index.getF()));
 
 		} catch (IOException e) {
 			Assert.assertTrue(false);
@@ -250,6 +216,8 @@ public class KMeansPlusTest {
 	@Test
 	public void testCluster_iris_relieff_weight_N() {
 		try {
+			double maxF = 0d;
+			int maxN = 0;
 			Dataset data = FileHandler.loadDataset(new File("input/iris.data"), 4, ",");
 			for (int i = 1; i < 50; i++) {
 				Dataset weights = FileHandler.loadDataset(new File("output/weight/iris/iris_relieff_N" + i + ".txt"),
@@ -264,18 +232,20 @@ public class KMeansPlusTest {
 
 				DatasetUtils.exportDatasetWithCluster(clusters,
 						"output/kmeansplus/iris/iris_relieff_weight_N" + i + ".txt");
+
+				// evaluation
+				RandIndex index = new RandIndex(clusters);
+				Log.debug("N=" + i + ",FValue=" + index.getF());
+				if (index.getF() > maxF) {
+					maxF = index.getF();
+					maxN = i;
+				}
 			}
-			/*
-			 * String[][] rate = DatasetUtils.checkRate(clusters, data);
-			 * assertEquals("Iris-setosa", rate[0][0]); assertEquals("1.0",
-			 * rate[0][1]);
-			 * 
-			 * assertEquals("Iris-virginica", rate[1][0]); assertEquals("0.74",
-			 * rate[1][1]);
-			 * 
-			 * assertEquals("Iris-versicolor", rate[2][0]); assertEquals("1.0",
-			 * rate[2][1]);
-			 */
+
+			Log.info("maxN=" + maxN);
+			Log.info("maxF=" + maxF);
+			assertEquals(new Double(0.923265306122449), new Double(maxF));
+			assertEquals(6, maxN);
 		} catch (IOException e) {
 			Assert.assertTrue(false);
 		} catch (DefectAIException e) {
