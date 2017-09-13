@@ -86,6 +86,19 @@
 			<version>0.9-7</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit -->
+		<dependency>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
+			<version>4.8.0.201706111038-r</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.kohsuke/github-api -->
+		<dependency>
+			<groupId>org.kohsuke</groupId>
+			<artifactId>github-api</artifactId>
+			<version>1.89</version>
+		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/junit/junit -->
 		<dependency>
@@ -93,7 +106,6 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 		</dependency>
-
 
 	</dependencies>
 </project>
