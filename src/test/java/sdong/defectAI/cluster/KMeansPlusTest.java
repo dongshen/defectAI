@@ -253,4 +253,20 @@ public class KMeansPlusTest {
 			e.printStackTrace();
 		}
 	}
+
+	@Test
+	public void testCluster_density_iris() {
+		try {
+			Dataset data = FileHandler.loadDataset(new File("input/iris.data"), 4, ",");
+
+			KMeansPlus km = new KMeansPlus();
+			int K = km.computeKByDensity(data);
+			// assertEquals(new Double(0.8206565252201762), new
+			// Double(index.getF()));
+
+		} catch (IOException e) {
+			Assert.assertTrue(false);
+		}
+	}
+
 }

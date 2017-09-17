@@ -155,6 +155,8 @@ public class GitUtils {
 
 			// ´ò¿ªgit²Ö¿â
 			Git git = Git.open(rootDir);
+			
+			git.add().addFilepattern(".").call();
 
 			RevCommit revCommit = git.commit().setCommitter(DEFAULT_USER, DEFAULT_USER_EMAIL).setMessage(remark).call();
 

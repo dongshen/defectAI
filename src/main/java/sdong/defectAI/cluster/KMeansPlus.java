@@ -4,10 +4,13 @@
 package sdong.defectAI.cluster;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.log4j.Logger;
 
 import net.sf.javaml.clustering.Clusterer;
 import net.sf.javaml.core.Dataset;
@@ -31,6 +34,9 @@ import sdong.defectAI.utils.Utils;
  * 
  */
 public class KMeansPlus implements Clusterer {
+
+	private static final Logger LOG = Logger.getLogger(KMeansPlus.class);
+
 	/**
 	 * The number of clusters.
 	 */
@@ -187,22 +193,18 @@ public class KMeansPlus implements Clusterer {
 		return output;
 	}
 
+	/**
+	 * Get the K which is the number of cluster
+	 * 
+	 * @param data
+	 * @return
+	 */
 	public int computeTheK(Dataset data) {
-		int NumOfData = data.size();
-		int cntTuple = 0;
 		double distance = 0.0;
 		double averageDis = 0.0;
-		Map<String, Double> distanceMatrix = new HashMap<String, Double>();
+		Map<String, Double> distanceMatrix = computeDistance(data);
 
-		for (int i = 0; i < NumOfData - 1; ++i) {
-			for (int j = i + 1; j < NumOfData; ++j) {
-				distance = dm.measure(data.get(i), data.get(j));
-				distanceMatrix.put(i + "," + j, distance);
-				averageDis += distance;
-				cntTuple++;
-			}
-		}
-		averageDis /= cntTuple;// 计算平均距离
+		averageDis = getDistanceSummary(distanceMatrix) / distanceMatrix.size();// 计算平均距离
 
 		List<Entry<String, Double>> list = Utils.sortMapValueDesend(distanceMatrix);
 
@@ -216,9 +218,9 @@ public class KMeansPlus implements Clusterer {
 			String[] node = entry.getKey().split(",");
 			Instance nodeOne = data.get(Integer.parseInt(node[0]));
 			Instance nodeTwo = data.get(Integer.parseInt(node[1]));
-			
-			//System.out.println(nodeOne.getID() + "," + nodeTwo.getID());
-			
+
+			// System.out.println(nodeOne.getID() + "," + nodeTwo.getID());
+
 			if (distance < averageDis)
 				break;// 如果接下来的元组，两节点间距离小于平均距离，则不继续迭代
 			if (!flag) {
@@ -248,14 +250,77 @@ public class KMeansPlus implements Clusterer {
 		return centroids.size();
 	}
 
-	private double getDistance(Map<String, Double> distanceMatrix, Instance nodeOne, Instance nodeTwo) {
-		Double distance = distanceMatrix.get(nodeOne.getID() + "," + nodeTwo.getID());
-		if (distance == null) {
-			distance = distanceMatrix.get(nodeTwo.getID() + "," + nodeOne.getID());
-		} else {
-			// Todo get error
+	private Map<String, Double> computeDistance(Dataset data) {
+		int NumOfData = data.size();
+		double distance = 0.0;
+		Map<String, Double> distanceMatrix = new HashMap<String, Double>();
+
+		for (int i = 0; i < NumOfData - 1; ++i) {
+			for (int j = i + 1; j < NumOfData; ++j) {
+				distance = dm.measure(data.get(i), data.get(j));
+				distanceMatrix.put(i + "," + j, distance);
+				distanceMatrix.put(j + "," + i, distance);
+			}
 		}
 
+		LOG.debug(distanceMatrix.toString());
+		return distanceMatrix;
+	}
+
+	/**
+	 * get the summary of all instances' distance
+	 * 
+	 * @param distanceMatrix
+	 * @return
+	 */
+	private Double getDistanceSummary(Map<String, Double> distanceMatrix) {
+		double sumDis = 0.0;
+		for (Map.Entry<String, Double> entry : distanceMatrix.entrySet()) {
+			sumDis = sumDis + entry.getValue();
+		}
+		return sumDis;
+	}
+
+	public int computeKByDensity(Dataset data) {
+
+		int k = 0;
+		double dc = 0.0;
+		double avg = 0.0;
+		Map<String, Double> distanceMatrix = computeDistance(data);
+
+		avg = getDistanceSummary(distanceMatrix) / 2 / distanceMatrix.size();
+		dc = avg * 0.2;// 计算平均距离
+		LOG.debug("dc=" + dc);
+		int[] density = getDensity(data, distanceMatrix, dc);
+
+		return k;
+	}
+
+	private int[] getDensity(Dataset data, Map<String, Double> distanceMatrix, double dc) {
+		int NumOfData = data.size();
+		int[] density = new int[data.size()];
+		double dis = 0.0d;
+		int dens;
+		for (int i = 0; i < NumOfData - 1; ++i) {
+			dens = 0;
+			for (int j = 0; j < NumOfData - 1; ++j) {
+				if (i != j) {
+					dis = getDistance(distanceMatrix, data.get(i), data.get(j));
+					if (dis <= dc) {
+						dens = dens + 1;
+					}
+				}
+			}
+			density[i] = dens;
+		}
+		LOG.debug("density=" + Arrays.toString(density));
+		return density;
+
+	}
+
+	private double getDistance(Map<String, Double> distanceMatrix, Instance nodeOne, Instance nodeTwo) {
+		Double distance = distanceMatrix.get(nodeOne.getID() + "," + nodeTwo.getID());
+		LOG.debug(nodeOne.getID() + "," + nodeTwo.getID() + "=" + distance);
 		return distance;
 	}
 
