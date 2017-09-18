@@ -6,14 +6,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.log4j.Logger;
 
 import net.sf.javaml.core.Dataset;
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.core.SparseInstance;
+import net.sf.javaml.distance.DistanceMeasure;
 import sdong.defectAI.exception.DefectAIException;
 import sdong.defectAI.tokenizer.TokenUtils;
 
 public class DatasetUtils {
+	private static final Logger LOG = Logger.getLogger(DatasetUtils.class);
+
 	public static List<String> getDatasetCluster(Dataset[] clusters) {
 
 		List<String> clusterlist = new ArrayList<String>();
@@ -207,5 +213,32 @@ public class DatasetUtils {
 			lists.add(list);
 		}
 		return lists;
+	}
+
+	public static Map<String, Double> computeDistance(Dataset data, DistanceMeasure dm) {
+		int NumOfData = data.size();
+		double distance = 0.0;
+		Map<String, Double> distanceMatrix = new HashMap<String, Double>();
+
+		for (int i = 0; i < NumOfData - 1; ++i) {
+			for (int j = i + 1; j < NumOfData; ++j) {
+				distance = dm.measure(data.get(i), data.get(j));
+				distanceMatrix.put(i + "," + j, distance);
+				distanceMatrix.put(j + "," + i, distance);
+			}
+		}
+
+		LOG.debug(distanceMatrix.toString());
+		return distanceMatrix;
+	}
+	
+	public static double getMaxDistance(Map<String, Double> distanceMap){
+		double distance = 0.0;
+		for(Entry<String, Double> entry: distanceMap.entrySet()){
+			if(distance < entry.getValue()){
+				distance = entry.getValue();
+			}
+		}
+		return distance;
 	}
 }

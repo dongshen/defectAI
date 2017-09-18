@@ -19,6 +19,7 @@ import net.sf.javaml.core.DenseInstance;
 import net.sf.javaml.core.Instance;
 import net.sf.javaml.distance.DistanceMeasure;
 import net.sf.javaml.distance.EuclideanDistance;
+import sdong.defectAI.utils.DatasetUtils;
 import sdong.defectAI.utils.Utils;
 
 /**
@@ -285,13 +286,14 @@ public class KMeansPlus implements Clusterer {
 
 		int k = 0;
 		double dc = 0.0;
-		double avg = 0.0;
-		Map<String, Double> distanceMatrix = computeDistance(data);
+		double maxDistance = 0.0;
+		Map<String, Double> distanceMatrix = DatasetUtils.computeDistance(data,dm);
 
-		avg = getDistanceSummary(distanceMatrix) / 2 / distanceMatrix.size();
-		dc = avg * 0.2;// 计算平均距离
+		maxDistance = DatasetUtils.getMaxDistance(distanceMatrix);
+		dc = maxDistance * 0.125;// 计算平均距离
 		LOG.debug("dc=" + dc);
 		int[] density = getDensity(data, distanceMatrix, dc);
+		double[] delta = getDelta(data,density, distanceMatrix, maxDistance);
 
 		return k;
 	}
@@ -301,9 +303,9 @@ public class KMeansPlus implements Clusterer {
 		int[] density = new int[data.size()];
 		double dis = 0.0d;
 		int dens;
-		for (int i = 0; i < NumOfData - 1; ++i) {
+		for (int i = 0; i < NumOfData; ++i) {
 			dens = 0;
-			for (int j = 0; j < NumOfData - 1; ++j) {
+			for (int j = 0; j < NumOfData; ++j) {
 				if (i != j) {
 					dis = getDistance(distanceMatrix, data.get(i), data.get(j));
 					if (dis <= dc) {
@@ -315,6 +317,29 @@ public class KMeansPlus implements Clusterer {
 		}
 		LOG.debug("density=" + Arrays.toString(density));
 		return density;
+
+	}
+	
+	private double[] getDelta(Dataset data,int[] roh, Map<String, Double> distanceMatrix,double maxDistance) {
+		int NumOfData = data.size();
+		double[] delta = new double[data.size()];
+		double dis = 0.0d;
+		double minDis = maxDistance;
+		
+		for (int i = 0; i < NumOfData; ++i) {
+			minDis = maxDistance;
+			for (int j = 0; j < NumOfData; ++j) {
+				if (i != j && roh[j]>roh[i]) {
+					dis = distanceMatrix.get(i+","+j);
+					if (dis < minDis) {
+						minDis = dis;
+					}
+				}
+			}
+			delta[i] = minDis/maxDistance;
+		}
+		LOG.debug("delta=" + Arrays.toString(delta));
+		return delta;
 
 	}
 
